@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension type="plugin" group="console" method="upgrade">
+	<name>Ethaae Tools Console Plugin</name>
+	<version>1.0.0</version>
+	<creationDate>05/2024</creationDate>
+	<author>Tasos Triantis</author>
+	<description>Various Cli Utilities</description>
+	<namespace path="src">ETHAAE\Plugin\Console\Ethaae</namespace>
+	<files>
+		<folder plugin="ethaae_cli">services</folder>
+		<folder>src</folder>
+	</files>
+	<config>
+		<fields name="params">
+			<fieldset name="basic">
+				<field
+						name="api_url"
+						type="text"
+						label="ETHAAE API Url"
+						description=""
+						default=""
+						required="true"
+						filter="string"
+						class="input-xxlarge"
+				/>
+			</fieldset>
+		</fields>
+	</config>
+</extension>
