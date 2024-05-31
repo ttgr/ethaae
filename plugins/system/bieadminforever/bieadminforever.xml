@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension version="1.0" type="plugin" group="system" method="upgrade">
+    <name>BIE Admin Forever</name>
+    <author>Tasos Triantis</author>
+    <license>GNU/GPLv3</license>
+    <authorEmail>tasos@bie-paris.org</authorEmail>
+    <authorUrl>www.bie-paris.org</authorUrl>
+    <creationDate>Jan 2023</creationDate>
+    <copyright>Copyright 2018 BIE. All Rights Reserved.</copyright>
+    <license></license>
+    <version>1.0.0</version>
+    <description>BIE Admin Forever</description>
+    <namespace path="src">Joomla\Plugin\System\Bieadminforever</namespace>
+    <files>
+        <filename plugin="bieadminforever">bieadminforever.php</filename>
+    </files>
+    <media folder="media" destination="plg_bieadminforever">
+        <folder>js</folder>
+        <filename>joomla.asset.json</filename>
+    </media>
+
+</extension>
