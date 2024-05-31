@@ -19,6 +19,7 @@ use Joomla\CMS\MVC\Controller\AdminController;
 use Joomla\CMS\Response\JsonResponse;
 use Joomla\CMS\Router\Route;
 use Joomla\CMS\Uri\Uri;
+use Joomla\CMS\Utility\Utility;
 use Joomla\Utilities\ArrayHelper;
 
 /**
@@ -182,5 +183,103 @@ class ReportsController extends AdminController
         }
 
     }
+
+    public function getOtherUnitsAjax()
+    {
+        try
+        {
+
+            $app = Factory::getApplication();
+            $id = $app->input->get('department',0);
+
+            // Check if user token is valid.
+            if (!$this->checkToken('get'))
+            {
+                $app->enqueueMessage(Text::_('JINVALID_TOKEN'), 'error');
+                echo new JsonResponse;
+            }
+
+            $model = $this->getModel();
+            $r = $model->getOtherUnits($id);
+            $results ="[0|".Text::_('COM_ETHAAE_FORM_LBL_REPORT_FK_OTHER_UNIT_ID_FILTER_DEFAULT_OPTION');
+            foreach ($r as $value) {
+                $results .= ",".$value[0].'|'.str_replace(","," ",$value[1]);
+            }
+            $results .="]";
+
+
+            echo new JsonResponse($results);
+        }
+        catch(Exception $e)
+        {
+            echo new JsonResponse($e);
+        }
+
+    }
+
+    public function uploadFileAjax() {
+        $app = Factory::getApplication();
+
+        // Check if user token is valid.
+        if (!$this->checkToken('get'))
+        {
+            $app->enqueueMessage(JText::_('JINVALID_TOKEN'), 'error');
+            echo new JsonResponse;
+        }
+
+        try
+        {
+            $model = $this->getModel();
+
+
+            $data['report'] = $app->input->get('id',0,'INT');
+            $data['user'] = $app->input->get('user',0,'INT');
+            $data['file'] = $app->input->files->get('file');
+
+
+
+            if (!$data['file']) {
+                $maxSize = number_format(Utility::getMaxUploadSize()/1048576, 2);
+                echo new JsonResponse("Unable to upload file. Please make sure that the file does not overpass the Max Allowed Filesize of ". $maxSize. " MB");
+                exit();
+            }
+
+            $result = $model->registerFile($data);
+            echo new JsonResponse($result);
+
+        }
+        catch(Exception $e)
+        {
+            echo new JsonResponse($e);
+        }
+    }
+
+
+    public function listingFilesAjax() {
+        try
+        {
+
+            $app = Factory::getApplication();
+            $id = $app->input->get('id',0,'INT');
+
+            // Check if user token is valid.
+            if (!$this->checkToken('get'))
+            {
+                $app->enqueueMessage(JText::_('JINVALID_TOKEN'), 'error');
+                echo new JsonResponse;
+            }
+
+            $model = $this->getModel();
+            //Creation of the Folder
+            $result = $model->getFilesLIsting($id);
+            echo new JsonResponse($result);
+        }
+        catch(Exception $e)
+        {
+            echo new JsonResponse($e);
+        }
+
+    }
+
 
 }

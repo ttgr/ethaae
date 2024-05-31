@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form addfieldprefix="Ethaaereports\Component\Ethaae_reports\Administrator\Field">
+  <fieldset>
+    <field name="id" type="text" readonly="true" class="readonly" default="0" description="JGLOBAL_FIELD_ID_DESC"/>
+    <field name="state" default="1" type="list" label="JSTATUS" description="JFIELD_PUBLISHED_DESC" class="inputbox" size="1">
+      <option value="1">JPUBLISHED</option>
+      <option value="0">JUNPUBLISHED</option>
+    </field>
+    <field name="ordering"/>
+    <field name="checked_out" type="hidden" filter="unset"/>
+    <field name="checked_out_time" type="hidden" filter="unset"/>
+    <field name="created_by" type="createdby" default="0" label="JGLOBAL_FIELD_CREATED_BY_LABEL" description="JGLOBAL_FIELD_CREATED_BY_DESC" hidden="true" hint="COM_ETHAAE_REPORTS_FORM_LBL_REPORTSFILE_CREATED_BY"/>
+    <field name="modified_by" type="modifiedby" default="0" label="JGLOBAL_FIELD_MODIFIED_BY_LABEL" description="JGLOBAL_FIELD_MODIFIED_BY_DESC" hidden="true" hint="COM_ETHAAE_REPORTS_FORM_LBL_REPORTSFILE_MODIFIED_BY"/>
+    <field name="rid" label="COM_ETHAAE_REPORTS_FORM_LBL_REPORTSFILE_RID" description="COM_ETHAAE_REPORTS_FORM_DESC_REPORTSFILE_RID" hidden="true" hint="COM_ETHAAE_REPORTS_FORM_LBL_REPORTSFILE_RID"/>
+    <field name="type" label="COM_ETHAAE_REPORTS_FORM_LBL_REPORTSFILE_TYPE" description="COM_ETHAAE_REPORTS_FORM_DESC_REPORTSFILE_TYPE" hidden="true" hint="COM_ETHAAE_REPORTS_FORM_LBL_REPORTSFILE_TYPE"/>
+    <field name="name" label="COM_ETHAAE_REPORTS_FORM_LBL_REPORTSFILE_NAME" description="COM_ETHAAE_REPORTS_FORM_DESC_REPORTSFILE_NAME" hidden="true" hint="COM_ETHAAE_REPORTS_FORM_LBL_REPORTSFILE_NAME"/>
+    <field name="path" label="COM_ETHAAE_REPORTS_FORM_LBL_REPORTSFILE_PATH" description="COM_ETHAAE_REPORTS_FORM_DESC_REPORTSFILE_PATH" hidden="true" hint="COM_ETHAAE_REPORTS_FORM_LBL_REPORTSFILE_PATH"/>
+    <field name="size" label="COM_ETHAAE_REPORTS_FORM_LBL_REPORTSFILE_SIZE" description="COM_ETHAAE_REPORTS_FORM_DESC_REPORTSFILE_SIZE" hidden="true" hint="COM_ETHAAE_REPORTS_FORM_LBL_REPORTSFILE_SIZE"/>
+    <field name="fk_report_id" type="foreignkey" label="COM_ETHAAE_REPORTS_FORM_LBL_REPORTSFILE_FK_REPORT_ID" description="COM_ETHAAE_REPORTS_FORM_DESC_REPORTSFILE_FK_REPORT_ID" default="0" input_type="list" table="#__ethaae_reports" key_field="fk_reporttype_id" translate="true" value_field="title" hide_trashed="1"/>
+    <field name="caption" filter="safehtml" type="text" label="COM_ETHAAE_REPORTS_FORM_LBL_REPORTSFILE_CAPTION" description="COM_ETHAAE_REPORTS_FORM_DESC_REPORTSFILE_CAPTION" hint="COM_ETHAAE_REPORTS_FORM_LBL_REPORTSFILE_CAPTION"/>
+    <field name="description" filter="safehtml" type="textarea" label="COM_ETHAAE_REPORTS_FORM_LBL_REPORTSFILE_DESCRIPTION" description="COM_ETHAAE_REPORTS_FORM_DESC_REPORTSFILE_DESCRIPTION" hint="COM_ETHAAE_REPORTS_FORM_LBL_REPORTSFILE_DESCRIPTION"/>
+    <field name="fk_file_id" type="foreignkey" label="COM_ETHAAE_REPORTS_FORM_LBL_REPORTSFILE_FK_FILE_ID" description="COM_ETHAAE_REPORTS_FORM_DESC_REPORTSFILE_FK_FILE_ID" default="0" input_type="list" table="#__ethaae_reports_filetype" key_field="id" translate="true" value_field="name"/>
+    <field name="language" client="site" type="language" label="COM_ETHAAE_REPORTS_FORM_LBL_REPORTSFILE_LANGUAGE" description="COM_ETHAAE_REPORTS_FORM_DESC_REPORTSFILE_LANGUAGE" hint="COM_ETHAAE_REPORTS_FORM_LBL_REPORTSFILE_LANGUAGE"/>
+    <field name="version_note" type="text" label="JGLOBAL_FIELD_VERSION_NOTE_LABEL" description="JGLOBAL_FIELD_VERSION_NOTE_DESC" class="inputbox" size="45" labelclass="control-label"/>
+  </fieldset>
+</form>

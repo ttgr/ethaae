@@ -46,16 +46,18 @@ class HtmlView extends BaseHtmlView
 		$this->form  = $this->get('Form');
 
         $cond_dept_frm = $this->form->getFieldAttribute('fk_deprtement_id','condition');
+        $cond_prog_frm = $this->form->getFieldAttribute('fk_programme_id','condition');
+        $cond_other_frm = $this->form->getFieldAttribute('fk_other_unit_id','condition');
 
         $this->item->fk_institute_id = (isset($this->item->fk_institute_id) && $this->item->fk_institute_id) ? $this->item->fk_institute_id : 0;
-        $this->form->setFieldAttribute('fk_deprtement_id','condition',$cond_dept_frm. ' AND instituteid = '. $this->item->fk_institute_id.' ');
-
-
+        //dump($this->item);
         if ($this->item->fk_institute_id) {
-            $this->form->setFieldAttribute('fk_deprtement_id','condition','inst_id = '. $this->item->fk_institute_id);
+            $this->form->setFieldAttribute('fk_deprtement_id','condition',$cond_dept_frm. ' AND instituteid = '. $this->item->fk_institute_id.' ');
+            $this->form->setFieldAttribute('fk_other_unit_id','condition',$cond_other_frm. ' AND parentunitid = '. $this->item->fk_institute_id.' ');
+
             if ($this->item->fk_deprtement_id) {
-                $this->form->setFieldAttribute('fk_programme_id','condition','dep_id = '. $this->item->fk_deprtement_id.' AND parent_type_id='.$this->item->dep_type_id);
-                //$this->item->fk_deprtement_id = $this->item->fk_deprtement_id."-".$this->item->dep_type_id;
+                $this->form->setFieldAttribute('fk_programme_id','condition',$cond_prog_frm.' AND parentunitid='.$this->item->fk_deprtement_id);
+
             }
         }
 

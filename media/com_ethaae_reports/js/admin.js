@@ -1,4 +1,6 @@
+
 // https://github.com/Choices-js/Choices?tab=readme-ov-file#methods
+
 
 window.Joomla = window.Joomla || {};
 
@@ -106,11 +108,42 @@ var getProgrammes = function(val) {
         })
 };
 
+var getOtherUnits = function(val) {
+    setSelectedUnit(val);
+    url = document.getElementById("otherunites-type-url").value+'&department='+  val;
+    Joomla.removeMessages();
+    js.ajax({
+        method: "POST",
+        url: url,
+        dataType: "json"
+    }).fail(function(e) {
+        console.log(e);
+    }).done(function(e) {
+        regExp = /\[(.*?)\]/g;
+        matches = e.data.match(regExp);
+        clearOptionList("jform_fk_other_unit_id");
+
+        el = document.getElementById("jform_fk_other_unit_id");
+        const fancySelect = el.closest('joomla-field-fancy-select');
+        m =matches[0].substring(1, matches[0].length - 1);
+        arr = m.split(",");
+        options = '';
+        js.each(arr, function(key,value) {
+            t = value.split("|");
+            options += '<option value="' + t[0] + '">' + t[1] + '</option>';
+            const option = {};
+            option.innerText = t[1];
+            option.id = t[0];
+            fancySelect.choicesInstance.setChoices([option], 'id', 'innerText', false);
+        });
+        fancySelect.choicesInstance.setChoiceByValue('0');
+        js(el).html(options);
+        js(el).trigger("liszt:updated");
+    })
+};
 
 
-var setSelectedUnit  = function (val) {
-    document.getElementById("jform_fk_unit_id").value = val;
-}
+
 
 var onReportTypeChange = function () {
     setSelectedUnit(0);
@@ -136,4 +169,47 @@ var clearOptionList = function(obj_name) {
     const fancySelect = el.closest('joomla-field-fancy-select');
     fancySelect.choicesInstance.clearChoices();
     fancySelect.choicesInstance.removeActiveItems();
+};
+
+
+
+var showFilesListing = function(uri) {
+    js('#files-table > tbody').html("");
+    js.ajax({
+        method: "POST",
+        url: uri,
+        dataType: "json"
+    }).fail(function(e) {
+        //console.log(e);
+        const obj = e.responseJSON;
+        const messages = {error: [obj.message,uri]};
+        Joomla.renderMessages(messages);
+
+    }).done(function(e) {
+        //const messages = {error: ["<?php //echo $ajaxFoldersListingUri;?>//"]};
+        //Joomla.renderMessages(messages);
+//            console.log(e.data)
+        //regExp = /\[(.*?)\]/g;
+        //matches = e.data.match(regExp);
+        js.each(e.data, function( index, obj ) {
+            addRowFilesTable(obj);
+            //console.log(obj);
+        });
+    })
+};
+
+var addRowFilesTable = function (obj) {
+    console.log(obj.downloadlink);
+    js('#files-table > tbody:last-child').append('<tr id="item-'+obj.id+'">' +
+        '<td id="code-'+obj.id+'" data-value="'+obj.caption+'">'+obj.caption+'</td>' +
+        '<td class="center" id="lang-'+obj.id+'">'+obj.langImage+'</td>' +
+        '<td id="type-'+obj.id+'">'+obj.ftype+'</td>' +
+        '<td class="center">' +
+        '<ul class="actions">' +
+        '<li>'+obj.downloadlink + '</li>' +
+        '<li>'+obj.editlink + '</li>' +
+        '<li><img alt="Delete file" src=""/></li>' +
+    '</ul>' +
+    '</td>' +
+    '</tr>');
 };

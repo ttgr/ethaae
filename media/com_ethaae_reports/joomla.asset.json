@@ -28,7 +28,7 @@
     {
       "name": "com_ethaae_reports.dropzone",
       "type": "script",
-      "uri": "com_adip/dropzone.min.js",
+      "uri": "com_ethaae_reports/dropzone.min.js",
       "dependencies": [
         "jquery"
       ],
@@ -39,12 +39,12 @@
     {
       "name": "com_ethaae_reports.form",
       "type": "style",
-      "uri": "com_adip/form.css"
+      "uri": "com_ethaae_reports/form.css"
     },
     {
       "name": "com_ethaae_reports.dropzone",
       "type": "style",
-      "uri": "com_adip/dropzone.min.css"
+      "uri": "com_ethaae_reports/dropzone.min.css"
     }
   ]
 }

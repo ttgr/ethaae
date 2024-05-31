@@ -42,15 +42,15 @@
            description="COM_ETHAAE_REPORTS_FORM_DESC_REPORT_FK_INSTITUTE_ID"
            default="0"
            input_type="list"
-           table="#__ethaae_institutes_structure"
+           table="#__ethaae_all_units"
            key_field="id"
            translate="false"
-           value_field="title_el"
+           value_field="name_el"
            hide_trashed="1"
            required="true"
-           condition="unit_type_id = 1"
-           fk_ordering="title_el ASC"
-           onchange="getDepartments(this.value)"
+           condition="grouping = 1"
+           fk_ordering="name_el ASC"
+           onchange="getDepartments(this.value);getOtherUnits(this.value);"
     >
       <option value="0">COM_ETHAAE_REPORTS_FK_INSTITUDE_ID_FILTER</option>
     </field>
@@ -62,13 +62,13 @@
            description="COM_ETHAAE_REPORTS_FORM_DESC_REPORT_FK_DEPRTEMENT_ID"
            default="0"
            input_type="list"
-           table="#__ethaae_institutes_structure"
+           table="#__ethaae_all_units"
            key_field="id"
            translate="false"
-           value_field="title_el"
-           condition="unit_type_id in (2,3,10)"
+           value_field="name_el"
+           condition="grouping = 2"
            hide_trashed="1"
-           fk_ordering="title_el ASC"
+           fk_ordering="name_el ASC"
            showon="fk_reporttype_id:2,4[AND]fk_institute_id!:0"
            onchange="getProgrammes(this.value)"
     >
@@ -81,12 +81,13 @@
            description="COM_ETHAAE_FORM_DESC_REPORT_FK_PROGRAMME_ID"
            default="0"
            input_type="list"
-           table="#__ethaae_institutes_structure"
+           table="#__ethaae_all_units"
            key_field="id"
-           value_field="title_el"
+           value_field="name_el"
            translate="false"
            hide_trashed="1"
-           condition="unit_type_id in (4,5,6,7,11,12)"
+           condition="grouping = 3"
+           fk_ordering="name_el ASC"
            showon="fk_reporttype_id:4[AND]fk_institute_id!:0[AND]fk_deprtement_id!:0"
            onchange="setSelectedUnit(this.value)"
     >
@@ -99,16 +100,17 @@
            description=""
            default="0"
            input_type="list"
-           table="#__ethaae_institutes_structure"
+           table="#__ethaae_all_units"
            key_field="id"
-           value_field="title_el"
+           value_field="name_el"
            translate="false"
            hide_trashed="1"
-           condition="unit_type_id in (9,8)"
+           condition="grouping = 4"
+           fk_ordering="name_el ASC"
            showon="fk_reporttype_id:5[AND]fk_institute_id!:0"
            onchange="setSelectedUnit(this.value)"
     >
-      <option value="0">COM_ETHAAE_REPORTS_FK_PROGRAMME_ID_FILTER</option>
+      <option value="0">COM_ETHAAE_FORM_LBL_REPORT_FK_OTHER_UNIT_ID_FILTER_DEFAULT_OPTION</option>
     </field>
 
 
@@ -118,16 +120,77 @@
       <option value="1">COM_ETHAAE_REPORTS_REPORTS_ACADEMIC_GREEK_OPTION_1</option>
       <option value="2">COM_ETHAAE_REPORTS_REPORTS_ACADEMIC_GREEK_OPTION_2</option>
     </field>
-    <field name="session_num" size="20" maxlength="20" filter="safehtml" type="text" label="COM_ETHAAE_REPORTS_FORM_LBL_REPORT_SESSION_NUM" description="COM_ETHAAE_REPORTS_FORM_DESC_REPORT_SESSION_NUM" hint="COM_ETHAAE_REPORTS_FORM_LBL_REPORT_SESSION_NUM" showon="fk_reporttype_id:3,4"/>
-    <field name="report_year" size="4" maxlength="4" filter="int" type="text" required="true" label="COM_ETHAAE_REPORTS_FORM_LBL_REPORT_REPORT_YEAR" description="COM_ETHAAE_REPORTS_FORM_DESC_REPORT_REPORT_YEAR" hint="COM_ETHAAE_REPORTS_FORM_LBL_REPORT_REPORT_YEAR"/>
-    <field name="session_date" class="inputbox" format="%d/%m/%Y" timeformat="12" filter="none" translateformat="false" showtime="false" singleheader="false" todaybutton="false" weeknumbers="false" filltable="false" type="calendar" label="COM_ETHAAE_REPORTS_FORM_LBL_REPORT_SESSION_DATE" description="COM_ETHAAE_REPORTS_FORM_DESC_REPORT_SESSION_DATE" hint="COM_ETHAAE_REPORTS_FORM_LBL_REPORT_SESSION_DATE" showon="fk_reporttype_id:3,4"/>
-    <field name="valid_from" class="inputbox" format="%d/%m/%Y" timeformat="12" filter="server_utc" translateformat="false" showtime="false" singleheader="false" todaybutton="false" weeknumbers="false" filltable="false" type="calendar" label="COM_ETHAAE_REPORTS_FORM_LBL_REPORT_VALID_FROM" description="COM_ETHAAE_REPORTS_FORM_DESC_REPORT_VALID_FROM" hint="COM_ETHAAE_REPORTS_FORM_LBL_REPORT_VALID_FROM"/>
-    <field name="valid_to" class="inputbox" format="%d/%m/%Y" timeformat="12" filter="server_utc" translateformat="false" showtime="false" singleheader="false" todaybutton="false" weeknumbers="false" filltable="false" type="calendar" label="COM_ETHAAE_REPORTS_FORM_LBL_REPORT_VALID_TO" description="COM_ETHAAE_REPORTS_FORM_DESC_REPORT_VALID_TO" hint="COM_ETHAAE_REPORTS_FORM_LBL_REPORT_VALID_TO" showon="fk_reporttype_id:3,4"/>
-
-    <field name="title" filter="safehtml" type="hidden" label="JGLOBAL_TITLE" description="JFIELD_TITLE_DESC" hint="COM_ETHAAE_REPORTS_FORM_LBL_REPORT_TITLE"/>
-    <field name="fk_unit_id"
+    <field name="session_num"
+           size="20"
+           maxlength="20"
            filter="safehtml"
            type="text"
+           label="COM_ETHAAE_REPORTS_FORM_LBL_REPORT_SESSION_NUM"
+           description="COM_ETHAAE_REPORTS_FORM_DESC_REPORT_SESSION_NUM"
+           hint="COM_ETHAAE_REPORTS_FORM_LBL_REPORT_SESSION_NUM"
+           showon="fk_reporttype_id:3,4"
+    />
+    <field name="report_year" size="4" maxlength="4" filter="int" type="text" required="true" label="COM_ETHAAE_REPORTS_FORM_LBL_REPORT_REPORT_YEAR" description="COM_ETHAAE_REPORTS_FORM_DESC_REPORT_REPORT_YEAR" hint="COM_ETHAAE_REPORTS_FORM_LBL_REPORT_REPORT_YEAR"/>
+    <field name="session_date"
+           class="inputbox"
+           timeformat="12"
+           filter="none"
+           translateformat="false"
+           showtime="false"
+           singleheader="false"
+           todaybutton="false"
+           weeknumbers="false"
+           filltable="false"
+           format="%d/%m/%Y"
+           type="calendar"
+           label="COM_ETHAAE_REPORTS_FORM_LBL_REPORT_SESSION_DATE"
+           description="COM_ETHAAE_REPORTS_FORM_DESC_REPORT_SESSION_DATE"
+           hint="COM_ETHAAE_REPORTS_FORM_LBL_REPORT_SESSION_DATE"
+           showon="fk_reporttype_id:3,4"/>
+
+    <field name="valid_from"
+           class="inputbox"
+           timeformat="12"
+           filter="server_utc"
+           translateformat="false"
+           showtime="false"
+           singleheader="false"
+           todaybutton="false"
+           weeknumbers="false"
+           filltable="false"
+           format="%d/%m/%Y"
+           type="calendar"
+           label="COM_ETHAAE_REPORTS_FORM_LBL_REPORT_VALID_FROM"
+           description="COM_ETHAAE_REPORTS_FORM_DESC_REPORT_VALID_FROM"
+           hint="COM_ETHAAE_REPORTS_FORM_LBL_REPORT_VALID_FROM"/>
+
+    <field name="valid_to"
+           class="inputbox"
+           timeformat="12"
+           filter="server_utc"
+           translateformat="false"
+           showtime="false"
+           singleheader="false"
+           todaybutton="false"
+           weeknumbers="false"
+           filltable="false"
+           format="%d/%m/%Y"
+           type="calendar"
+           label="COM_ETHAAE_REPORTS_FORM_LBL_REPORT_VALID_TO"
+           description="COM_ETHAAE_REPORTS_FORM_DESC_REPORT_VALID_TO"
+           hint="COM_ETHAAE_REPORTS_FORM_LBL_REPORT_VALID_TO"
+           showon="fk_reporttype_id:3,4"/>
+
+    <field name="title"
+           filter="safehtml"
+           type="hidden"
+           label="JGLOBAL_TITLE"
+           description="JFIELD_TITLE_DESC"
+           hint="COM_ETHAAE_REPORTS_FORM_LBL_REPORT_TITLE"
+    />
+    <field name="fk_unit_id"
+           filter="safehtml"
+           type="hidden"
            label="COM_ETHAAE_REPORTS_FORM_LBL_REPORT_FK_UNIT_ID"
            description="COM_ETHAAE_REPORTS_FORM_DESC_REPORT_FK_UNIT_ID"
            default=""
