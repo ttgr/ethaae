@@ -9,6 +9,7 @@ use Joomla\Application\ApplicationEvents;
 use Joomla\CMS\Factory;
 use ETHAAE\Plugin\Console\Ethaae\CliCommand\RunHelloCommand;
 use ETHAAE\Plugin\Console\Ethaae\CliCommand\GetDataApiCommand;
+use ETHAAE\Plugin\Console\Ethaae\CliCommand\ImportReportsCommand;
 
 class EthaaeConsolePlugin extends CMSPlugin implements SubscriberInterface
 {
@@ -24,6 +25,7 @@ class EthaaeConsolePlugin extends CMSPlugin implements SubscriberInterface
         $app = Factory::getApplication();
         $app->addCommand(new RunHelloCommand());
         $app->addCommand(new GetDataApiCommand());
+        $app->addCommand(new ImportReportsCommand());
     }
 
     public function getApiUrl() {
