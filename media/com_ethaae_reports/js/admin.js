@@ -199,16 +199,17 @@ var showFilesListing = function(uri) {
 };
 
 var addRowFilesTable = function (obj) {
-    console.log(obj.downloadlink);
+    //console.log(obj);
     js('#files-table > tbody:last-child').append('<tr id="item-'+obj.id+'">' +
         '<td id="code-'+obj.id+'" data-value="'+obj.caption+'">'+obj.caption+'</td>' +
         '<td class="center" id="lang-'+obj.id+'">'+obj.langImage+'</td>' +
         '<td id="type-'+obj.id+'">'+obj.ftype+'</td>' +
+        '<td class="center" id="state-'+obj.id+'">'+obj.state_link+'</td>' +
         '<td class="center">' +
         '<ul class="actions">' +
         '<li>'+obj.downloadlink + '</li>' +
         '<li>'+obj.editlink + '</li>' +
-        '<li><img alt="Delete file" src=""/></li>' +
+        '<li>'+obj.delete_link + '</li>' +
     '</ul>' +
     '</td>' +
     '</tr>');

@@ -379,20 +379,43 @@ class ReportModel extends AdminModel
 
 
 
+    public function deleteFile(int $id): bool
+    {
+        $canDo = Ethaae_reportsHelper::getActions();
 
+        if ($id > 0 && $canDo->get('core.delete')) {
+
+            $db = Factory::getContainer()->get('DatabaseDriver');
+            $query = $db->getQuery(true);
+
+            $conditions = array(
+                $db->quoteName('id') . ' = '.$db->quote($id),
+            );
+            $query->delete($db->quoteName('#__ethaae_reports_files'));
+            $query->where($conditions);
+            $db->setQuery($query);
+
+            if($result = $db->execute()) {
+                return true;
+            } else {
+                return false;
+            }
+
+        }
+        return true;
+    }
 
 
     public function save($data)
     {
-
-        $s_date = $data['session_date'];
-        $v_from = $data['valid_from'];
-        $v_to = $data['valid_to'];
-
-
-        $data['session_date'] = Ethaae_reportsHelper::getDateISOFormat($data['session_date']);
-        $data['valid_from'] = Ethaae_reportsHelper::getDateISOFormat($data['valid_from']);
-        $data['valid_to'] = Ethaae_reportsHelper::getDateISOFormat($data['valid_to']);
+//        $s_date = $data['session_date'];
+//        $v_from = $data['valid_from'];
+//        $v_to = $data['valid_to'];
+//
+//
+//        $data['session_date'] = Ethaae_reportsHelper::getDateISOFormat($data['session_date']);
+//        $data['valid_from'] = Ethaae_reportsHelper::getDateISOFormat($data['valid_from']);
+//        $data['valid_to'] = Ethaae_reportsHelper::getDateISOFormat($data['valid_to']);
         $data['params'] = [
             "fk_reporttype_id" => $data['fk_reporttype_id'],
             "fk_institute_id" => $data['fk_institute_id'],
@@ -401,6 +424,10 @@ class ReportModel extends AdminModel
             "fk_other_unit_id" => $data['fk_other_unit_id'],
         ];
         $data['title'] = Ethaae_reportsHelper::getUnitInfo($data['fk_unit_id'])->title;
+
+
+
+
         try {
             $result = parent::save($data);
             if ($result) {
@@ -418,9 +445,9 @@ class ReportModel extends AdminModel
 
 
 
-        $data['session_date'] = $s_date;
-        $data['valid_from'] = $v_from;
-        $data['valid_to'] = $v_to;
+//        $data['session_date'] = $s_date;
+//        $data['valid_from'] = $v_from;
+//        $data['valid_to'] = $v_to;
 
         return true;
     }
@@ -493,7 +520,7 @@ class ReportModel extends AdminModel
             $link = HTMLHelper::_(
                 'link',
                 '#',
-                HTMLHelper::_('image', 'com_adip/edit.png', null, null, true),
+                HTMLHelper::_('image', 'com_ethaae_reports/edit.png', null, null, true),
                 [
                     'class'                 => 'alert-link',
                     'data-joomla-dialog'    => htmlspecialchars(json_encode($popupOptions, JSON_UNESCAPED_SLASHES), ENT_COMPAT, 'UTF-8'),
@@ -508,7 +535,7 @@ class ReportModel extends AdminModel
             $link = HTMLHelper::_(
                 'link',
                 Uri::root()."index.php?option=com_ethaae_reports&task=report.download&id=".md5($row['id'])."&sid=".$sid,
-                HTMLHelper::_('image', 'com_adip/view.png', null, null, true),
+                HTMLHelper::_('image', 'com_ethaae_reports/view.png', null, null, true),
                 [
                     'class'                 => 'alert-link',
                 ],
@@ -519,6 +546,17 @@ class ReportModel extends AdminModel
             $languages = LanguageHelper::getLanguages('lang_code');
             $sefTag = $languages[$row['language']]->sef;
             $row['langImage'] = HTMLHelper::_('image', 'mod_languages/' . $sefTag . '.gif', $languages[$row['language']]->title_native, ['title' => $languages[$row['language']]->title_native], true);
+            $row['state_link'] = HTMLHelper::_('jgrid.published', $row['state'], 0, 'reports.', false, 'cb');
+
+            $link = HTMLHelper::_(
+                'link',
+                "javascript:deleteReportFile('". (int) $row['id']."');",
+                HTMLHelper::_('image', 'com_ethaae_reports/bin.png', null, null, true),
+                [
+                    'class'                 => 'alert-link',
+                ],
+            );
+            $row['delete_link'] = $link;
         }
 
         return $rows;

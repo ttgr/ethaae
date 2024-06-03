@@ -12,6 +12,8 @@ namespace Ethaaereports\Component\Ethaae_reports\Administrator\Helper;
 defined('_JEXEC') or die;
 
 use \Joomla\CMS\Factory;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Language\LanguageHelper;
 use \Joomla\CMS\Language\Text;
 use \Joomla\CMS\Object\CMSObject;
 
@@ -33,19 +35,31 @@ class Ethaae_reportsHelper
 	 *
 	 * @return  array  The files
 	 */
-	public static function getFiles($pk, $table, $field)
+	public static function getFiles($report_id,$state = "")
 	{
-		$db = Factory::getContainer()->get('DatabaseDriver');
-		$query = $db->getQuery(true);
+        $db = Factory::getContainer()->get('DatabaseDriver');
+        $query = $db->getQuery(true);
+        $query
+            ->select(array('f.*', 't.name as ftype'))
+            ->from($db->quoteName('#__ethaae_reports_files', 'f'))
+            ->join('LEFT', '#__ethaae_reports_filetype AS t ON t.`id` = f.`fk_file_id`')
+            ->where($db->quoteName('f.fk_report_id') . ' = ' . $db->quote($db->escape($report_id)));
 
-		$query
-			->select($field)
-			->from($table)
-			->where('id = ' . (int) $pk);
+            if(!empty($state))
+                $query->where($db->quoteName('f.state') . ' = ' . $db->quote($state));
 
-		$db->setQuery($query);
+            $query->order('f.`fk_file_id` ASC');
 
-		return explode(',', $db->loadResult());
+        $db->setQuery($query);
+        $items = $db->loadObjectList();
+
+        foreach ($items as &$item) {
+            $languages = LanguageHelper::getLanguages('lang_code');
+            $sefTag = $languages[$item->language]->sef;
+            $item->langImage = HTMLHelper::_('image', 'mod_languages/' . $sefTag . '.gif', $languages[$item->language]->title_native, ['title' => $languages[$item->language]->title_native], true);
+        }
+
+        return $items;
 	}
 
 	/**

@@ -40,6 +40,8 @@ $ajaxProgrammesUri ='index.php?option=com_ethaae_reports&task=reports.getProgram
 $UnitInfoUri = 'index.php?option=com_ethaae_units&view=institutesstructure&layout=view&tmpl=component&' . Session::getFormToken() . '=1&id='.$this->item->fk_unit_id;
 $ajaxFoldersListingUri = 'index.php?option=com_ethaae_reports&task=reports.listingFilesAjax&format=json&' . Session::getFormToken() . '=1&id='.$this->item->id;
 $ajaxFoldersUri = 'index.php?option=com_ethaae_reports&task=reports.uploadFileAjax&format=json&' . Session::getFormToken() . '=1';
+$deleteFileUri = 'index.php?option=com_ethaae_reports&task=reports.deleteFile&' . Session::getFormToken() . '=1&cid='.$this->item->id.'&fid=';
+
 $maxSize = number_format(Utility::getMaxUploadSize()/1048576, 2);
 
 $class = ((int) $this->item->fk_unit_id > 0) ? 'show' : 'hide';
@@ -121,6 +123,7 @@ $link = HTMLHelper::_(
                             <th><?php echo Text::_('COM_ETHAAE_REPORTS_TABLE_FILES_TITLE'); ?></th>
                             <th class="center"><?php echo Text::_('COM_ETHAAE_REPORTS_TABLE_FILES_LANGUAGE'); ?></th>
                             <th><?php echo Text::_('COM_ETHAAE_REPORTS_TABLE_FILES_TYPE'); ?></th>
+                            <th><?php echo Text::_('COM_ETHAAE_REPORTS_FILES_STATUS'); ?></th>
                             <th style="width:15%;"><?php echo Text::_('COM_ETHAAE_REPORTS_TABLE_FILES_ACTIONS'); ?></th>
                         </tr>
                         </thead>
@@ -187,6 +190,13 @@ $link = HTMLHelper::_(
         return true;
     }
 
+    var deleteReportFile = function (id) {
+        if(confirm('<?php echo Text::_('COM_ETHAAE_REPORTS_FILES_DELETE_FILE');?>')) {
+            let url = '<?php echo $deleteFileUri; ?>' + id;
+            window.location.href = url;
+        }
+
+    }
 
     js(document).ready(function () {
 

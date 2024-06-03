@@ -91,8 +91,12 @@ if (!empty($saveOrder))
 						<th class='left'>
 							<?php echo Text::_( 'COM_ETHAAE_REPORTS_REPORTS_FK_REPORTTYPE_ID');?>
 						</th>
-						
-					<th scope="col" class="w-3 d-none d-lg-table-cell" >
+                        <th class='left'>
+                            <?php echo Text::_('COM_ETHAAE_REPORTS_REPORTTYPES_FILES'); ?>
+                        </th>
+
+
+                        <th scope="col" class="w-3 d-none d-lg-table-cell" >
 
 						<?php echo HTMLHelper::_('searchtools.sort',  'JGRID_HEADING_ID', 'a.id', $listDirn, $listOrder); ?>					</th>
 					</tr>
@@ -111,8 +115,12 @@ if (!empty($saveOrder))
 						$canEdit    = $user->authorise('core.edit', 'com_ethaae_reports');
 						$canCheckin = $user->authorise('core.manage', 'com_ethaae_reports');
 						$canChange  = $user->authorise('core.edit.state', 'com_ethaae_reports');
-						?>
-						<tr class="row<?php echo $i % 2; ?>" data-draggable-group='0' data-transition>
+
+                        $showFiles  = isset($item->files) && count($item->files) > 0;
+                        $onClick = ($showFiles) ? 'onclick="toggleMembers('.$item->id.');"':"";
+
+                        ?>
+						<tr class="row<?php echo $i % 2; ?>">
 							<td class="text-center">
 								<?php echo HTMLHelper::_('grid.id', $i, $item->id); ?>
 							</td>
@@ -163,33 +171,46 @@ if (!empty($saveOrder))
 							<td>
 								<?php
 									$date = $item->session_date;
-									echo $date > 0 ? HTMLHelper::_('date', $date, Text::_('DATE_FORMAT_LC4')) : '-';
+									echo $date > 0 ? HTMLHelper::_('date', $date, Text::_('DATE_FORMAT_GREEK')) : '-';
 								?>
 							</td>
 							<td>
 								<?php
 									$date = $item->valid_from;
-									echo $date > 0 ? HTMLHelper::_('date', $date, Text::_('DATE_FORMAT_LC4')) : '-';
+									echo $date > 0 ? HTMLHelper::_('date', $date, Text::_('DATE_FORMAT_GREEK')) : '-';
 								?>
 							</td>
 							<td>
 								<?php
 									$date = $item->valid_to;
-									echo $date > 0 ? HTMLHelper::_('date', $date, Text::_('DATE_FORMAT_LC4')) : '-';
+									echo $date > 0 ? HTMLHelper::_('date', $date, Text::_('DATE_FORMAT_GREEK')) : '-';
 								?>
 							</td>
 							<td>
 								<?php echo $item->fk_reporttype; ?>
 							</td>
-							
-							<td class="d-none d-lg-table-cell">
-							<?php echo $item->id; ?>
+                            <td>
+                                <?php if ($showFiles) : ?>
+                                    <div <?php echo $onClick; ?> class="btn btn-small button-new btn-success"><?php echo Text::_('COM_ETHAAE_REPORTS_REPORTTYPES_FILES_SHOW'); ?></div>
+                                <?php else: ?>
+                                    <?php echo Text::_('COM_ETHAAE_REPORTS_REPORTTYPES_NO_FILES'); ?>
+                                <?php endif; ?>
+                            </td>
 
+                            <td class="d-none d-lg-table-cell">
+							    <?php echo $item->id; ?>
 							</td>
-
-
 						</tr>
-					<?php endforeach; ?>
+                        <?php if ($showFiles) : ?>
+                        <tr id="files_<?php echo $item->id; ?>" class="delegates" style="display: none;">
+                            <td colspan="20" class="delegates">
+                                <?php include 'files.php'; ?>
+                            </td>
+                        </tr>
+                    <?php endif; ?>
+
+
+                    <?php endforeach; ?>
 					</tbody>
 				</table>
 
@@ -201,3 +222,15 @@ if (!empty($saveOrder))
 		</div>
 	</div>
 </form>
+
+<script type="text/javascript">
+    js = jQuery.noConflict();
+
+    function toggleMembers(id) {
+        el = document.getElementById("files_"+id);
+        js(el).slideToggle( "slow", function() {
+            // Animation complete.
+        });
+    }
+
+</script>

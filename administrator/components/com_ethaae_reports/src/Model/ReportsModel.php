@@ -297,6 +297,7 @@ class ReportsModel extends ListModel
 			{
                 $oneItem->fk_institute = Ethaae_reportsHelper::getUnitInfo($oneItem->fk_institute_id)->title;
 			}
+            $oneItem->files =  Ethaae_reportsHelper::getFiles($oneItem->id);
 		}
 
 		return $items;

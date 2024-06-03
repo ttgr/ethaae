@@ -64,6 +64,44 @@ class ReportsController extends AdminController
 		$this->setRedirect('index.php?option=com_ethaae_reports&view=reports');
 	}
 
+
+    public function deleteFile() {
+
+        $app = Factory::getApplication();
+
+        if (!$this->checkToken('get'))
+        {
+            $app->enqueueMessage(Text::_('JINVALID_TOKEN'), 'error');
+        }
+
+        $cid = $app->input->get('cid', 0, 'INT');
+        $fid = $app->input->get('fid', 0, 'INT');
+
+        try {
+            $model = $this->getModel();
+            if ($fid >0) {
+
+                if ($result = $model->deleteFile($fid)) {
+                    $app->enqueueMessage(Text::_('COM_ETHAAE_REPORTS_FILES_DELETE_FILE_SUCCESS'), 'success');
+                } else {
+                    $app->enqueueMessage(Text::_('COM_ETHAAE_REPORTS_FILES_DELETE_FILE_FAILED'), 'error');
+                }
+
+            }
+        }
+        catch (\Exception $e)
+        {
+            $app->enqueueMessage($e->getMessage(), 'warning');
+        }
+
+        if ($cid > 0) {
+            $this->setRedirect('index.php?option=com_ethaae_reports&view=report&layout=edit&id='.$cid);
+        } else {
+            $this->setRedirect('index.php?option=com_ethaae_reports&view=reports');
+        }
+
+    }
+
 	/**
 	 * Proxy for getModel.
 	 *
