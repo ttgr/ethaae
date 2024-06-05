@@ -26,6 +26,7 @@ use Ethaaereports\Component\Ethaae_reports\Administrator\Helper\Ethaae_reportsHe
 use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Uri\Uri;
 use \Joomla\Filesystem\File;
+use Joomla\Utilities\ArrayHelper;
 
 /**
  * Report model.
@@ -379,6 +380,7 @@ class ReportModel extends AdminModel
 
 
 
+    //To-Do: Delete Physical Files too
     public function deleteFile(int $id): bool
     {
         $canDo = Ethaae_reportsHelper::getActions();
@@ -562,5 +564,13 @@ class ReportModel extends AdminModel
         return $rows;
     }
 
+
+//To-DO: create a delete function that deletes files too
+//    public function delete(&$pks) {
+//
+//        $pks  = ArrayHelper::toInteger((array) $pks);
+//
+//
+//    }
 
 }
