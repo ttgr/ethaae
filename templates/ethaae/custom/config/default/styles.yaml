@@ -1,0 +1,234 @@
+preset: preset1
+base:
+  background-color: '#ffffff'
+  background-image: ''
+  background-repeat: no-repeat
+  background-size: auto
+  background-attachment: scroll
+  text-color: '#818181'
+fonts:
+  body-font: CFAstyPro-Book
+  heading-font: CFAstyPro-Book
+  menu-font: CFAstyPro-Book
+fontsizes:
+  body-font-size: 1.0rem
+  menu-font-size: 0.9rem
+accent:
+  color-1: '#000000'
+  color-2: '#8f4dae'
+drawer:
+  background-color: '#ffffff'
+  background-image: ''
+  background-repeat: no-repeat
+  background-size: auto
+  background-attachment: scroll
+  text-color: '#818181'
+  heading-color: '#2a2a2a'
+top:
+  background-color: '#f49e2e'
+  background-image: ''
+  background-repeat: no-repeat
+  background-size: auto
+  background-attachment: scroll
+  text-color: '#ffffff'
+  heading-color: '#ffffff'
+header:
+  background-color: '#ffffff'
+  background-image: ''
+  background-repeat: no-repeat
+  background-size: auto
+  background-attachment: scroll
+  text-color: '#818181'
+  heading-color: '#2a2a2a'
+navigation:
+  background-color: '#ffffff'
+  background-image: ''
+  background-repeat: no-repeat
+  background-size: auto
+  background-attachment: scroll
+  text-color: '#818181'
+  heading-color: '#2a2a2a'
+breadcrumb:
+  background-color: '#ffffff'
+  background-image: 'gantry-media://bgshowcase.png'
+  background-repeat: repeat
+  background-size: auto
+  background-attachment: scroll
+  text-color: '#818181'
+  heading-color: '#2a2a2a'
+fullwidth:
+  background-color: '#ffffff'
+  background-image: ''
+  background-repeat: no-repeat
+  background-size: auto
+  background-attachment: scroll
+  text-color: '#818181'
+  heading-color: '#2a2a2a'
+showcase:
+  background-color: '#ffffff'
+  background-image: 'gantry-media://bgshowcase.png'
+  background-repeat: repeat
+  background-size: auto
+  background-attachment: scroll
+  text-color: '#818181'
+  heading-color: '#2a2a2a'
+intro:
+  background-color: '#f7f7f7'
+  background-image: ''
+  background-repeat: no-repeat
+  background-size: auto
+  background-attachment: scroll
+  text-color: '#818181'
+  heading-color: '#2a2a2a'
+feature:
+  background-color: '#f7f7f7'
+  background-image: ''
+  background-repeat: no-repeat
+  background-size: auto
+  background-attachment: scroll
+  text-color: '#818181'
+  heading-color: '#2a2a2a'
+subfeature:
+  background-color: '#f7f7f7'
+  background-image: ''
+  background-repeat: no-repeat
+  background-size: auto
+  background-attachment: scroll
+  text-color: '#818181'
+  heading-color: '#2a2a2a'
+utility:
+  background-color: '#ffffff'
+  background-image: ''
+  background-repeat: no-repeat
+  background-size: auto
+  background-attachment: scroll
+  text-color: '#818181'
+  heading-color: '#2a2a2a'
+maintop:
+  background-color: '#f7f7f7'
+  background-image: ''
+  background-repeat: no-repeat
+  background-size: auto
+  background-attachment: scroll
+  text-color: '#818181'
+  heading-color: '#2a2a2a'
+systemmessages:
+  background-color: '#ffffff'
+  background-image: ''
+  background-repeat: no-repeat
+  background-size: auto
+  background-attachment: scroll
+  text-color: '#818181'
+  heading-color: '#2a2a2a'
+sidebar:
+  background-color: '#ffffff'
+  background-image: ''
+  background-repeat: no-repeat
+  background-size: auto
+  background-attachment: scroll
+  text-color: '#818181'
+  heading-color: '#2a2a2a'
+mainbody:
+  background-color: '#ffffff'
+  background-image: ''
+  background-repeat: no-repeat
+  background-size: auto
+  background-attachment: scroll
+  text-color: '#818181'
+  heading-color: '#2a2a2a'
+aside:
+  background-color: '#ffffff'
+  background-image: ''
+  background-repeat: no-repeat
+  background-size: auto
+  background-attachment: scroll
+  text-color: '#818181'
+  heading-color: '#2a2a2a'
+mainbottom:
+  background-color: '#ffffff'
+  background-image: ''
+  background-repeat: no-repeat
+  background-size: auto
+  background-attachment: scroll
+  text-color: '#818181'
+  heading-color: '#2a2a2a'
+extension:
+  background-color: '#f7f7f7'
+  background-image: ''
+  background-repeat: no-repeat
+  background-size: auto
+  background-attachment: scroll
+  text-color: '#818181'
+  heading-color: '#2a2a2a'
+additional:
+  background-color: '#ffffff'
+  background-image: ''
+  background-repeat: no-repeat
+  background-size: auto
+  background-attachment: scroll
+  text-color: '#818181'
+  heading-color: '#2a2a2a'
+prebottom:
+  background-color: '#f7f7f7'
+  background-image: ''
+  background-repeat: no-repeat
+  background-size: auto
+  background-attachment: scroll
+  text-color: '#818181'
+  heading-color: '#2a2a2a'
+bottom:
+  background-color: '#ffffff'
+  background-image: ''
+  background-repeat: no-repeat
+  background-size: auto
+  background-attachment: scroll
+  text-color: '#818181'
+  heading-color: '#2a2a2a'
+afterbottom:
+  background-color: '#ffffff'
+  background-image: ''
+  background-repeat: no-repeat
+  background-size: auto
+  background-attachment: scroll
+  text-color: '#818181'
+  heading-color: '#2a2a2a'
+last:
+  background-color: '#ffffff'
+  background-image: ''
+  background-repeat: no-repeat
+  background-size: auto
+  background-attachment: scroll
+  text-color: '#818181'
+  heading-color: '#2a2a2a'
+footer:
+  background-color: '#78c4ce'
+  background-image: ''
+  background-repeat: no-repeat
+  background-size: auto
+  background-attachment: scroll
+  text-color: '#ffffff'
+  heading-color: '#ffffff'
+copyright:
+  background-color: '#2a2a2a'
+  background-image: ''
+  background-repeat: no-repeat
+  background-size: auto
+  background-attachment: scroll
+  text-color: '#aaaaaa'
+  heading-color: '#ffffff'
+offcanvas:
+  background: '#ffffff'
+  text-color: '#818181'
+  width: 17rem
+  toggle-color: '#818181'
+  toggle-position: right
+  overlay: 'rgba(0, 0, 0, 0.6)'
+breakpoints:
+  large-desktop-container: 75rem
+  desktop-container: 60rem
+  tablet-container: 48rem
+  large-mobile-container: 30rem
+  mobile-menu-breakpoint: 60rem
+menu:
+  col-width: 180px
+  animation: g-fade-in-up

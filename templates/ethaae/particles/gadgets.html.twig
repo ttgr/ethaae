@@ -1,0 +1,224 @@
+{% extends '@nucleus/partials/particle.html.twig' %}
+
+{% set attr_extra = '' %}
+{% if particle.extra %}
+    {% for attributes in particle.extra %}
+        {% for key, value in attributes %}
+            {% set attr_extra = attr_extra ~ ' ' ~ key|e ~ '="' ~ value|e('html_attr') ~ '"' %}
+        {% endfor %}
+    {% endfor %}
+{% endif %}
+
+{% block stylesheets %}
+    {% if particle.display.offcanvas %}
+        {{ parent() }}
+        <style type="text/css">
+            @media (min-width: {{ gantry.config.get('styles.breakpoints.mobile-menu-breakpoint')|default('48rem') }}) {
+                .g-offcanvas-toggle {
+                    display: none;
+                }
+            }
+        </style>
+    {% endif %}
+    {% if particle.display.login %}
+        {{ parent() }}
+        <style type="text/css">
+            .g-gadgets #modal-login .uk-modal-dialog {
+                width: {{ particle.login.width|default('350px')|e }};
+            }
+        </style>
+    {% endif %}
+{% endblock %}
+
+{% set indentifier = random() %}
+
+{% set gadgetbuttons %}
+
+    {% if particle.display.login %}
+        <div class="g-gadget-login">
+            <a href="#modal-login" data-uk-modal="{center:true}" {% if particle.login.text %}data-uk-tooltip="{pos:'right'}" title="{{ particle.login.text|e }}"{% endif %} aria-label="{{'Login'|trans_key('IT_ACCESS_LOGIN')}}">
+                <i class="{{ particle.login.icon|default("fa fa-user")|e }}"></i>
+            </a>
+        </div>
+    {% endif %}
+
+    {% if particle.display.search %}
+        <div class="g-gadget-search">
+            <a href="{{'#'|trans_key('TPL_ADMIN_MOD_SEARCH_URL')}}" aria-label="{{'Search'|trans_key('IT_ACCESS_SEARCH')}}">
+                <i class="{{ particle.search.icon|default("fa fa-search")|e }}"></i>
+            </a>
+        </div>
+    {% endif %}
+
+    {% if particle.display.contact %}
+        <div class="g-gadget-contact">
+            <a href="{{'#g-touch'|trans_key('TPL_ADMIN_MOD_CONTACT_URL')}}"  aria-label="{{'Contact Details'|trans_key('IT_ACCESS_CONTACTDETAILS')}}">
+                <i class="{{ particle.touch.icon|default("fa fa-map-o")|e }}"></i>
+            </a>
+        </div>
+        <div class="g-gadget-facebook">
+            <a href="{{'#g-facebook'|trans_key('TPL_ADMIN_MOD_FACEBOOK_URL')}}"  aria-label="{{'Facebook'|trans_key('TPL_ADMIN_MOD_FACEBOOK_TITLE')}}">
+                <i class="fa fa-facebook"></i>
+            </a>
+        </div>
+        <div class="g-gadget-linked-in">
+            <a href="{{'#g-linked-in'|trans_key('TPL_ADMIN_MOD_LINKEDIN_URL')}}"  aria-label="{{'LinkedIn'|trans_key('TPL_ADMIN_MOD_LINKEDIN_TITLE')}}">
+                <i class="fa fa-linkedin"></i>
+            </a>
+        </div>
+        <div class="g-gadget-wiki">
+            <a href="{{'#g-wiki'|trans_key('TPL_ADMIN_MOD_WIKIPEDIA_URL')}}"  aria-label="{{'Wikipedia'|trans_key('TPL_ADMIN_MOD_WIKIPEDIA_TITLE')}}">
+                <i class="fa fa-wikipedia-w"></i>
+            </a>
+        </div>
+
+    {% endif %}
+    {% if particle.display.offcanvas %}
+        <div class="g-gadget-offcanvas">
+            <a class="offcanvas-toggle-particle" data-offcanvas-toggle="" {% if particle.offcanvas.text %}data-uk-tooltip="{pos:'right'}" title="{{ particle.offcanvas.text|e }}"{% endif %} aria-label="{{'Offcanvas'|trans_key('IT_ACCESS_OFFCANVAS')}}">
+                <i class="{{ particle.offcanvas.icon|default("fa fa-bars")|e }}"></i>
+            </a>
+        </div>
+    {% endif %}
+
+{% endset %}
+
+{% set modallogin %}
+    <div id="modal-login" class="uk-modal">
+        <a class="uk-modal-close uk-close" aria-label="{{'Close'|trans_key('IT_ACCESS_CLOSE')}}"></a>
+        <div class="uk-modal-dialog{% if particle.login.links|default("show") == "hide" %} hide-links{% endif %}">
+            {% if gantry.platform.getName() == 'joomla' %}
+                {{ gantry.platform.filter("{loadposition modal-login}")|html|raw }}
+            {% endif %}
+
+            {% if gantry.platform.getName() == 'wordpress' %}
+
+                <div class="g-login-form">
+
+                    {% if not is_user_logged_in %}
+
+                        <form action="{{ gantry.platform.call('wp_login_url', gantry.request.server['REQUEST_URI'])|raw }}" method="post" id="loginform">
+
+                            {% do gantry.platform.call('wp_nonce_field', 'log-in') %}
+
+                            <fieldset class="login-data">
+                                <p class="login-username">
+                                    <input id="user_login" type="text" name="log" class="inputbox" alt="username" size="18" value="" placeholder="{{ 'Username'|trans_key('G5_LOGIN_PARTICLE_USERNAME') }}" />
+                                </p>
+                                <p class="login-password">
+                                    <input id="user_pass" type="password" name="pwd" class="inputbox" size="18" alt="password" value="" placeholder="{{ 'Password'|trans_key('G5_LOGIN_PARTICLE_PASSWORD') }}" />
+                                </p>
+                                <p class="login-remember">
+                                    <input id="remember" type="checkbox" name="rememberme" class="inputbox" />
+                                    <label for="remember">{{ 'Remember me'|trans_key('G5_LOGIN_PARTICLE_REMEMBER') }}</label>
+                                </p>
+                                <p class="login-submit">
+                                    <input type="submit" value="{{ 'Log In'|trans_key('G5_LOGIN_PARTICLE_LOGIN') }}" class="button" name="submit" />
+                                </p>
+                            </fieldset>
+
+                            <ul class="login-extra">
+                                {% if gantry.platform.call('get_option', 'users_can_register') %}
+                                    <li>
+                                        <a href="{{ gantry.platform.call('wp_registration_url') }}"><i class="fa fa-question-circle"></i>{{ 'Register'|trans_key('G5_LOGIN_PARTICLE_REGISTER') }}</a>
+                                    </li>
+                                {% endif %}
+                                <li>
+                                    <a href="{{ gantry.platform.call('wp_lostpassword_url') }}"><i class="fa fa-question-circle"></i>{{ 'Forgot your password?'|trans_key('G5_LOGIN_PARTICLE_FORGOT_PASSWORD') }}</a>
+                                </li>
+                            </ul>
+
+                        </form>
+
+                    {% else %}
+
+                        <form action="{{ gantry.platform.call('wp_logout_url', gantry.request.server['REQUEST_URI'])|raw }}" method="post" id="loginform">
+
+                            {% do gantry.platform.call('wp_nonce_field', 'log-out') %}
+
+                            <div class="logout-button">
+                                <input type="submit" name="submit" class="button" value="{{ 'Log Out'|trans_key('G5_LOGIN_PARTICLE_LOGOUT') }}" />
+                            </div>
+
+                        </form>
+
+                    {% endif %}
+
+                </div>
+            {% endif %}
+        </div>
+    </div>
+{% endset %}
+
+{% set modalsearch %}
+    <div id="modal-search" class="uk-modal">
+        <a class="uk-modal-close uk-close" aria-label="{{'Close'|trans_key('IT_ACCESS_CLOSE')}}"></a>
+        <div class="uk-modal-dialog">
+            {% if gantry.platform.getName() == 'joomla' %}
+                {{ gantry.platform.filter("{loadposition modal-search}")|html|raw }}
+            {% endif %}
+
+            {% if gantry.platform.getName() == 'wordpress' %}
+                {{ gantry.platform.call('get_search_form') }}
+            {% endif %}
+        </div>
+    </div>
+{% endset %}
+
+{% set getintouch %}
+    <div id="g-touch" class="uk-modal">
+        <a class="uk-modal-close uk-close"></a>
+        <div class="uk-modal-dialog" style="width: {{ particle.touch.width|e }};">
+            <div class="g-touch-contacts">
+                <div class="g-grid">
+                    {% for item in particle.touch.items %}
+                        {% set attr_extra_item = '' %}
+                        {% for extra in item.extra %}
+                            {% set attr_extra_item = attr_extra_item ~ ' ' ~ extra|keys|first|e ~ '="' ~ extra|values|first|e('html_attr') ~ '"' %}
+                        {% endfor %}
+                        <div class="g-block{% if item.class %} {{ item.class|e }}{% endif %}" {% if item.extra %}{{ attr_extra_item|raw }}{% endif %}>
+                            <div class="g-touch-item">
+                                {% if item.link %}
+                                <a target="{{ item.target|default('_parent')|e }}" href="{{ item.link|e }}">
+                                    {% endif %}
+                                    {% if item.icon %}
+                                        <span class="g-touch-item-icon {{ item.icon|e }}"></span>
+                                    {% endif %}
+                                    {% if item.value %}
+                                        <span class="g-touch-item-value">{{ item.value|e }}</span>
+                                    {% endif %}
+                                    {% if item.link %}
+                                </a>
+                                {% endif %}
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="g-googlemap">
+                <div id="g-map-{{ indentifier|e }}" style="width: {{ particle.touch.width|e }}; height: {{ particle.touch.height|e }};">
+                </div>
+            </div>
+        </div>
+    </div>
+{% endset %}
+
+{% block particle %}
+    <div class="g-gadgets{% if particle.css.class %} {{ particle.css.class|e }}{% endif %}" {% if particle.extra %}{{ attr_extra|raw }}{% endif %}>
+        <div class="g-gadget-buttons">
+            {{ gadgetbuttons }}
+        </div>
+
+        {% if particle.display.login %}
+            {{ modallogin }}
+        {% endif %}
+
+        {% if particle.display.search %}
+            {{ modalsearch }}
+        {% endif %}
+
+        {% if particle.display.contact %}
+            {{ getintouch }}
+        {% endif %}
+    </div>
+{% endblock %}
