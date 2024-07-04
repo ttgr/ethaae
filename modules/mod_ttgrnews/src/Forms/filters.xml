@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form addfieldprefix="Joomla\Module\TTGRNews\Site\Field">
+    <field name="year"
+           type="newsyear"
+           label="Year"
+           description=""
+           catids=""
+           value=""
+           language=""
+           layout="joomla.form.field.list-fancy-select"
+    >
+        <option value="0">MOD_TTGRNEWS_FILTER_YEAR_LABEL</option>
+    </field>
+    <field
+            name="category_id"
+            type="newscategory"
+            label="JCATEGORY"
+            published="1"
+            extension="com_content"
+            language="en-GB"
+            catids=""
+            value=""
+            layout="joomla.form.field.list-fancy-select"
+    >
+        <option value="0">MOD_TTGRNEWS_FILTER_CATEGORY_LABEL</option>
+    </field>
+</form>

@@ -1,0 +1,467 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension type="module" client="site" method="upgrade">
+	<name>TTGR NewsPage Module</name>
+	<author>Tasos Triantis</author>
+	<creationDate>2024-06</creationDate>
+	<copyright>All rights reserved by TT 2024</copyright>
+	<license>All rights reserved by TT 2024</license>
+	<authorEmail>support@bie-paris.org</authorEmail>
+	<authorUrl>https://ttriantis.com</authorUrl>
+	<version>1.0.0</version>
+	<description>Displaying News Articles in Column View with Infinite Scroll (Ajax)</description>
+	<namespace path="src">Joomla\Module\TTGRNews</namespace>
+	<files>
+		<filename module="mod_ttgrnews">mod_ttgrnews.php</filename>
+		<file>helper.php</file>
+		<folder>src</folder>
+		<folder>language</folder>
+		<folder>tmpl</folder>
+		<folder>assets</folder>
+	</files>
+	<languages>
+		<language tag="en-GB">language/en-GB/mod_ttgrnews.ini</language>
+		<language tag="en-GB">language/en-GB/mod_ttgrnews.sys.ini</language>
+	</languages>
+	<config>
+		<fields name="params">
+			<fieldset name="basic">
+				<field
+						name="note1"
+						type="note"
+						label="Basic"/>
+
+				<field
+						name="count"
+						type="number"
+						label="MOD_TTGRNEWS_FIELD_COUNT_LABEL"
+						description="MOD_TTGRNEWS_FIELD_COUNT_DESC"
+						default="0"
+						filter="integer"
+				/>
+
+				<field
+						name="show_introtext"
+						type="radio"
+						layout="joomla.form.field.radio.switcher"
+						label="MOD_TTGRNEWS_FIELD_SHOWINTROTEXT_LABEL"
+						default="0"
+						filter="integer"
+				>
+					<option value="0">JHIDE</option>
+					<option value="1">JSHOW</option>
+				</field>
+
+				<field
+						name="introtext_limit"
+						type="number"
+						label="MOD_TTGRNEWS_FIELD_INTROTEXTLIMIT_LABEL"
+						default="100"
+						filter="integer"
+						showon="show_introtext:1"
+				/>
+
+				<field
+						name="show_front"
+						type="list"
+						label="MOD_TTGRNEWS_FIELD_SHOWFEATURED_LABEL"
+						default="show"
+						validate="options"
+				>
+					<option value="0">JSHOW</option>
+					<option value="2">JHIDE</option>
+					<option value="only">MOD_TTGRNEWS_OPTION_ONLYFEATURED_VALUE</option>
+				</field>
+
+				<field
+						name=""
+						type="spacer"
+						hr="false"
+				/>
+
+				<field
+						name="category_filtering_type"
+						type="radio"
+						layout="joomla.form.field.radio.switcher"
+						label="MOD_TTGRNEWS_FIELD_CATFILTERINGTYPE_LABEL"
+						default="1"
+						filter="integer"
+				>
+					<option value="0">MOD_TTGRNEWS_OPTION_EXCLUSIVE_VALUE</option>
+					<option value="1">MOD_TTGRNEWS_OPTION_INCLUSIVE_VALUE</option>
+				</field>
+
+				<field
+						name="catid"
+						type="category"
+						label="JCATEGORY"
+						extension="com_content"
+						multiple="true"
+						layout="joomla.form.field.list-fancy-select"
+						filter="intarray"
+						class="multipleCategories"
+				/>
+
+				<field
+						name="show_child_category_articles"
+						type="radio"
+						layout="joomla.form.field.radio.switcher"
+						label="MOD_TTGRNEWS_FIELD_SHOWCHILDCATEGORYARTICLES_LABEL"
+						default="0"
+						filter="integer"
+				>
+					<option value="0">MOD_TTGRNEWS_OPTION_EXCLUDE_VALUE</option>
+					<option value="1">MOD_TTGRNEWS_OPTION_INCLUDE_VALUE</option>
+				</field>
+
+				<field
+						name="levels"
+						type="number"
+						label="MOD_TTGRNEWS_FIELD_CATDEPTH_LABEL"
+						default="1"
+						filter="integer"
+						showon="show_child_category_articles:1"
+				/>
+
+				<field
+						name=""
+						type="spacer"
+						hr="false"
+				/>
+
+				<field
+						name="filter_tag"
+						type="tag"
+						label="MOD_TTGRNEWS_SELECT_TAGS"
+						mode="nested"
+						multiple="true"
+						filter="intarray"
+						class="multipleTags"
+				/>
+				<field
+						name="show_tags"
+						type="radio"
+						layout="joomla.form.field.radio.switcher"
+						label="MOD_TTGRNEWS_DISPLAY_TAGS"
+						default="0"
+						filter="integer"
+				>
+					<option value="0">JHIDE</option>
+					<option value="1">JSHOW</option>
+				</field>
+
+
+				<field
+						name=""
+						type="spacer"
+						hr="false"
+				/>
+
+				<field
+						name="excluded_articles"
+						type="textarea"
+						label="MOD_TTGRNEWS_FIELD_EXCLUDEDARTICLES_LABEL"
+						cols="10"
+						rows="3"
+				/>
+
+				<field
+						name=""
+						type="spacer"
+						hr="false"
+				/>
+
+				<field
+						name="date_filtering"
+						type="list"
+						label="MOD_TTGRNEWS_FIELD_DATEFILTERING_LABEL"
+						default="off"
+						validate="options"
+				>
+					<option value="off">MOD_TTGRNEWS_OPTION_OFF_VALUE</option>
+					<option value="range">MOD_TTGRNEWS_OPTION_DATERANGE_VALUE</option>
+					<option value="relative">MOD_TTGRNEWS_OPTION_RELATIVEDAY_VALUE</option>
+				</field>
+
+				<field
+						name="date_field"
+						type="list"
+						label="MOD_TTGRNEWS_FIELD_DATERANGEFIELD_LABEL"
+						default="a.created"
+						showon="date_filtering!:off"
+						validate="options"
+				>
+					<option value="a.created">MOD_TTGRNEWS_OPTION_CREATED_VALUE</option>
+					<option value="a.modified">MOD_TTGRNEWS_OPTION_MODIFIED_VALUE</option>
+					<option value="a.publish_up">MOD_TTGRNEWS_OPTION_STARTPUBLISHING_VALUE</option>
+				</field>
+
+				<field
+						name="start_date_range"
+						type="calendar"
+						label="MOD_TTGRNEWS_FIELD_STARTDATE_LABEL"
+						translateformat="true"
+						showtime="true"
+						filter="user_utc"
+						showon="date_filtering:range"
+				/>
+
+				<field
+						name="end_date_range"
+						type="calendar"
+						label="MOD_TTGRNEWS_FIELD_ENDDATE_LABEL"
+						translateformat="true"
+						showtime="true"
+						filter="user_utc"
+						showon="date_filtering:range"
+				/>
+
+				<field
+						name="relative_date"
+						type="number"
+						label="MOD_TTGRNEWS_FIELD_RELATIVEDATE_LABEL"
+						default="30"
+						filter="integer"
+						showon="date_filtering:relative"
+				/>
+
+			</fieldset>
+
+
+			<fieldset name="image"
+					label="MOD_TTGRNEWS_THUMBNAIL_LABEL"
+			>
+				<field 
+					name="note4" 
+					type="note" 
+					label="MOD_TTGRNEWS_THUMBNAIL_SETTINGS_LABEL"/>
+				<field 
+					name="thumb_width" 
+					type="text" 
+					default="64" 
+					label="MOD_TTGRNEWS_THUMBNAIL_WIDTH_LABEL" 
+					description="MOD_TTGRNEWS_THUMBNAIL_WIDTH_DESC" />
+				<field 
+					name="thumb_height" 
+					type="text" 
+					default="64" 
+					label="MOD_TTGRNEWS_THUMBNAIL_HEIGHT_LABEL" 
+					description="MOD_TTGRNEWS_THUMBNAIL_HEIGHT_DESC" />
+				<field 
+					name="thumb_quality" 
+					type="list" 
+					default="7" 
+					label="MOD_TTGRNEWS_THUMBNAIL_QUALITY_LABEL" 
+					description="MOD_TTGRNEWS_THUMBNAIL_QUALITY_DESC">
+                    <option value="4">40%</option>
+                    <option value="5">50%</option>
+                    <option value="6">60%</option>
+                    <option value="7">70%</option>
+                    <option value="8">80%</option>
+                    <option value="9">90%</option>
+                </field>
+				<field 
+					name="thumb_resize_method" 
+					type="list" 
+					default="0" 
+					label="MOD_MFPP_RESIZE_METHOD_LABEL" 
+					description="MOD_MFPP_RESIZE_METHOD_DESC">
+                    <option value="0">MOD_MFPP_RESIZE_CROPRESIZE</option>
+                    <option value="1">MOD_MFPP_RESIZE_CROP</option>
+                    <option value="2">MOD_MFPP_RESIZE_RESIZE</option>
+                </field>
+				<field 
+					name="thumb_retina_option" 
+					type="list" 
+					default="3" 
+					label="MOD_TTGRNEWS_THUMBNAIL_RETINA_OPTION_LABEL" 
+					description="MOD_TTGRNEWS_THUMBNAIL_RETINA_OPTION_DESC"
+					showon="thumb_resize_method:0[OR]thumb_resize_method:2">
+                    <option value="1">JNO</option>
+                    <option value="2">2x</option>
+                    <option value="3">3x</option>
+                    <option value="4">4x</option>
+                    <option value="5">5x</option>
+                </field>
+				<field 
+					name="thumb_crop_left" 
+					type="number" 
+					default="0" 
+					label="MOD_TTGRNEWS_THUMBNAIL_CROP_LEFT_LABEL" 
+					description="MOD_TTGRNEWS_THUMBNAIL_CROP_LEFT_DESC" showon="thumb_resize_method:1"/>
+				<field 
+					name="thumb_crop_top" 
+					type="number" 
+					default="0" 
+					label="MOD_TTGRNEWS_THUMBNAIL_CROP_TOP_LABEL" 
+					description="MOD_TTGRNEWS_THUMBNAIL_CROP_TOP_DESC" showon="thumb_resize_method:1"/>
+				<field 
+					name="thumb_scale_method" 
+					type="list" 
+					default="2" 
+					label="MOD_MFPP_SCALE_METHOD_LABEL" 
+					description="MOD_MFPP_SCALE_METHOD_DESC" showon="thumb_resize_method:2">
+                    <option value="1">MOD_MFPP_SCALE_FILL</option>
+                    <option value="2">MOD_MFPP_SCALE_INSIDE</option>
+                    <option value="3">MOD_MFPP_SCALE_OUTSIDE</option>
+                    <option value="6">MOD_MFPP_SCALE_FIT</option>
+                </field>
+				<field 
+					name="show_default_thumb" 
+					type="radio" 
+					default="1" 
+					label="MOD_TTGRNEWS_THUMBNAIL_SHOW_DEFAULT_LABEL" 
+					description="MOD_TTGRNEWS_THUMBNAIL_SHOW_DEFAULT_DESC"
+					class="btn-group btn-group-yesno">
+					<option value="0">JHIDE</option>
+					<option value="1">JSHOW</option>
+				</field>
+
+				<field 
+					name="custom_default_thumb" 
+					type="media" directory="" 
+					label="MOD_TTGRNEWS_THUMBNAIL_CUSTOM_DEFAULT_LABEL" 
+					description="MOD_TTGRNEWS_THUMBNAIL_CUSTOM_DEFAULT_DESC" 
+					showon="show_default_thumb:1" />
+
+
+			</fieldset>
+
+			<fieldset name="formatting"
+					  label="MOD_TTGRNEWS_FORMATTING_LABEL"
+			>
+				<field
+						name="num_column"
+						type="number"
+						label="MOD_TTGRNEWS_FIELD_NUMCOLOUMN_LABEL"
+						default="3"
+						min="1"
+						max="9"
+						filter="integer"
+				/>
+				<field
+						name="show_category"
+						type="radio"
+						layout="joomla.form.field.radio.switcher"
+						label="MOD_TTGRNEWS_FIELD_SHOWCAT_LABEL"
+						default="0"
+						filter="integer"
+				>
+					<option value="0">JHIDE</option>
+					<option value="1">JSHOW</option>
+				</field>
+
+				<field
+						name="show_date"
+						type="radio"
+						layout="joomla.form.field.radio.switcher"
+						label="MOD_TTGRNEWS_FIELD_SHOWDATE_LABEL"
+						default="0"
+						filter="integer"
+				>
+					<option value="0">JHIDE</option>
+					<option value="1">JSHOW</option>
+				</field>
+
+				<field
+						name="show_date_format"
+						type="text"
+						default=""
+						label="MOD_TTGRNEWS_FIELD_CUSTOMDATEFORMAT_LABEL"
+						filter="raw"
+						description="MOD_TTGRNEWS_FIELD_CUSTOMDATEFORMAT_DESC"
+						hint="Y-m-d"
+				/>
+				<field
+						name="infinity_ajax_trigger"
+						type="list"
+						default="1"
+						label="MOD_TTGRNEWS_FIELD_INFINITY_AJAX_TRIGGER_LABEL"
+						description="MOD_TTGRNEWS_FIELD_INFINITY_AJAX_TRIGGER_DESC"
+				>
+					<option value="0">MOD_TTGRNEWS_FIELD_INFINITY_AJAX_TRIGGER_LOAD_BTN</option>
+					<option value="1">MOD_TTGRNEWS_FIELD_INFINITY_AJAX_TRIGGER_INFINITY_SCROLL</option>
+				</field>
+			</fieldset>
+			<fieldset
+					name="ordering"
+					label="MOD_TTGRNEWS_FIELD_GROUP_ORDERING_LABEL"
+			>
+
+				<field
+						name="article_ordering"
+						type="list"
+						label="MOD_TTGRNEWS_FIELD_ARTICLEORDERING_LABEL"
+						default="a.title"
+						validate="options"
+				>
+					<option value="a.ordering">MOD_TTGRNEWS_OPTION_ORDERING_VALUE</option>
+					<option value="fp.ordering">MOD_TTGRNEWS_OPTION_ORDERINGFEATURED_VALUE</option>
+					<option value="a.title">JGLOBAL_TITLE</option>
+					<option value="a.id">MOD_TTGRNEWS_OPTION_ID_VALUE</option>
+					<option value="a.alias">JFIELD_ALIAS_LABEL</option>
+					<option value="a.created">MOD_TTGRNEWS_OPTION_CREATED_VALUE</option>
+					<option value="modified">MOD_TTGRNEWS_OPTION_MODIFIED_VALUE</option>
+					<option value="publish_up">MOD_TTGRNEWS_OPTION_STARTPUBLISHING_VALUE</option>
+					<option value="a.publish_down">MOD_TTGRNEWS_OPTION_FINISHPUBLISHING_VALUE</option>
+				</field>
+
+				<field
+						name="article_ordering_direction"
+						type="list"
+						label="MOD_TTGRNEWS_FIELD_ARTICLEORDERINGDIR_LABEL"
+						default="ASC"
+						validate="options"
+				>
+					<option value="DESC">MOD_TTGRNEWS_OPTION_DESCENDING_VALUE</option>
+					<option value="ASC">MOD_TTGRNEWS_OPTION_ASCENDING_VALUE</option>
+				</field>
+			</fieldset>
+
+			<fieldset name="advanced">
+				<field
+					name="layout"
+					type="modulelayout"
+					label="JFIELD_ALT_LAYOUT_LABEL"
+					class="form-select"
+					validate="moduleLayout"
+				/>
+
+				<field
+					name="moduleclass_sfx"
+					type="textarea"
+					label="COM_MODULES_FIELD_MODULECLASS_SFX_LABEL"
+					rows="3"
+					validate="CssIdentifier"
+				/>
+
+				<field
+					name="cache"
+					type="list"
+					label="COM_MODULES_FIELD_CACHING_LABEL"
+					default="1"
+					filter="integer"
+					validate="options"
+					>
+					<option value="1">JGLOBAL_USE_GLOBAL</option>
+					<option value="0">COM_MODULES_FIELD_VALUE_NOCACHING</option>
+				</field>
+
+				<field
+					name="cache_time"
+					type="number"
+					label="COM_MODULES_FIELD_CACHE_TIME_LABEL"
+					default="900"
+					filter="integer"
+				/>
+
+				<field
+					name="cachemode"
+					type="hidden"
+					default="itemid"
+					>
+					<option value="itemid"></option>
+				</field>
+			</fieldset>
+		</fields>
+	</config>
+</extension>
