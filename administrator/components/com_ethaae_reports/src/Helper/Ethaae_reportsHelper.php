@@ -92,7 +92,7 @@ class Ethaae_reportsHelper
     public static function getDateGRFormat($date) {
 
         if(self::validateDate($date)) {
-            return Factory::getDate($date)->format('DATE_FORMAT_GREEK');
+            return HTMLHelper::_('date', $date, Text::_('DATE_FORMAT_GREEK'));
         } else {
             return "";
         }
@@ -126,6 +126,7 @@ class Ethaae_reportsHelper
             $query = $db->getQuery(true);
             $query
                 ->select($db->quoteName('i.id'))
+                ->select($db->quoteName('i.parentunitid'))
                 ->select('CONCAT(u.short_code_el,\'::\',i.title_el) as title')
                 ->from($db->quoteName('#__ethaae_institutes_structure','i'))
                 ->join('LEFT', '#__ethaae_unit_type AS u ON u.id = i.unit_type_id')

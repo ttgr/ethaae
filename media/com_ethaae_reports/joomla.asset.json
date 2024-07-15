@@ -26,6 +26,17 @@
         "uri": "com_ethaae_reports/list.css"
     },
     {
+      "name": "com_ethaae_reports.list",
+      "type": "script",
+      "uri": "com_ethaae_reports/list.js",
+      "dependencies": [
+        "jquery"
+      ],
+      "attributes": {
+        "defer": true
+      }
+    },
+    {
       "name": "com_ethaae_reports.dropzone",
       "type": "script",
       "uri": "com_ethaae_reports/dropzone.min.js",

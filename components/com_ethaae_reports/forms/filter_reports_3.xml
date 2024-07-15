@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+<field name="filter_fk_unit_id"
+       type="sql"
+       label="COM_ETHAAE_REPORTS_REPORTS_FK_UNIT_ID_3"
+       query=""
+       header="COM_ETHAAE_REPORTS_REPORTS_FK_UNIT_ID_FILTER"
+       key_field="id"
+       value_field="val"
+       class="inputbox"
+       onchange="this.form.submit()"
+       translate="true"
+/>
+
+    <field name="filter_report_year"
+           size="15"
+           maxlength="4"
+           filter="int"
+           type="text"
+           label="COM_ETHAAE_FORM_LBL_REPORT_REPORT_YEAR"
+           description=""
+           hint="COM_ETHAAE_FORM_LBL_REPORT_REPORT_YEAR_HINT"
+    />
+
+    <field name="filter_fk_reporttype_id" type="hidden" default="" />
+    <field name="filter_fk_institute_id" type="hidden" default="" />
+    <field name="filter_fk_dept_id" type="hidden" default="" />
+    <field name="dontresetstate" type="hidden" default="1" />
+
+    <field name="list_limit"
+           type="list"
+           label="COM_ETHAAE_REPORTS_LIST_LIMIT"
+           description="COM_ETHAAE_REPORTS_LIST_LIMIT_DESC"
+           class="input-mini"
+           default="25"
+           onchange="this.form.submit();"
+    >
+        <option value="10">10</option>
+        <option value="25">25</option>
+        <option value="50">50</option>
+        <option value="100">100</option>
+    </field>
+
+</form>

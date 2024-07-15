@@ -1,0 +1,68 @@
+/**
+ * @version     CVS: 1.1.0
+ * @package     com_ethaae_reports
+ * @copyright   2024 Tasos Triantis
+ * @license     GNU General Public License version 2 or later; see LICENSE.txt
+ * @author      Tasos Triantis <tasos.tr@gmail.com>
+ */
+
+
+.filter-group {
+    display: -webkit-flex;
+    display: flex;
+    -webkit-flex-direction: row;
+    flex-direction: row;
+    -webkit-flex-wrap: wrap;
+    flex-wrap: wrap;
+    -webkit-justify-content: flex-start;
+    justify-content: flex-start;
+    -webkit-align-content: stretch;
+    align-content: stretch;
+    -webkit-align-items: flex-start;
+    align-items: flex-start;
+    gap:2rem;
+}
+
+.filter-item {
+    -webkit-order: 0;
+    order: 0;
+    -webkit-flex: 0 1 auto;
+    flex: 0 1 auto;
+    -webkit-align-self: auto;
+    align-self: auto;
+}
+
+.container-filters {
+    display: -webkit-flex;
+    display: flex;
+    -webkit-flex-direction: row;
+    flex-direction: row;
+    -webkit-flex-wrap: wrap;
+    flex-wrap: wrap;
+    -webkit-justify-content: space-between;
+    justify-content: space-between;
+}
+
+.filters-item {
+    -webkit-order: 0;
+    order: 0;
+    -webkit-flex: 0 1 auto;
+    flex: 0 1 auto;
+    -webkit-align-self: auto;
+    align-self: auto;
+}
+
+.filter-item .chosen-single {
+    background: none;
+    height: 30px;
+    line-height: 30px;
+    color: #808080;
+    border: 1px solid #808080;
+}
+
+.filter-item .form-control {
+    border: 1px solid #808080;
+    border-radius: 4px;
+    padding: 5px 5px;
+    margin: 0;
+}

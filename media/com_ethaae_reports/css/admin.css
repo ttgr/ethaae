@@ -1,0 +1,26 @@
+.jcc-color-box {
+    float: left;
+    width: 15px;
+    height: 15px;
+    margin-right: 5px;
+    border: 1px solid rgba(0, 0, 0, .2);
+}
+
+.other-filters{
+    padding: 0 14px;
+}
+
+.files {
+    transition-property: opacity, visibility, display;
+    transition-duration: 0.7s;
+    transition-behavior: allow-discrete;
+    visibility: hidden;
+    opacity: 0;
+    display: none;
+}
+
+.files.open {
+    visibility: visible;
+    opacity: 1;
+    display:contents;
+}

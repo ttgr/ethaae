@@ -18,6 +18,7 @@ use \Joomla\CMS\Router\Route;
 use \Joomla\CMS\Layout\LayoutHelper;
 use \Joomla\CMS\Language\Text;
 use Joomla\CMS\Session\Session;
+use \Ethaaereports\Component\Ethaae_reports\Administrator\Helper\Ethaae_reportsHelper;
 
 HTMLHelper::_('bootstrap.tooltip');
 HTMLHelper::_('behavior.multiselect');
@@ -152,7 +153,7 @@ if (!empty($saveOrder))
                                         'data-joomla-dialog'    => htmlspecialchars(json_encode($popupOptions, JSON_UNESCAPED_SLASHES), ENT_COMPAT, 'UTF-8'),
                                     ],
                                 );
-                                    echo $link;
+                                    //echo $link;
                                 ?>
 							</td>
                             <td>
@@ -170,20 +171,19 @@ if (!empty($saveOrder))
 							</td>
 							<td>
 								<?php
-									$date = $item->session_date;
-									echo $date > 0 ? HTMLHelper::_('date', $date, Text::_('DATE_FORMAT_GREEK')) : '-';
+                                    echo Ethaae_reportsHelper::getDateGRFormat($item->session_date);
 								?>
 							</td>
 							<td>
 								<?php
-									$date = $item->valid_from;
-									echo $date > 0 ? HTMLHelper::_('date', $date, Text::_('DATE_FORMAT_GREEK')) : '-';
+                                    echo Ethaae_reportsHelper::getDateGRFormat($item->valid_from);
 								?>
 							</td>
 							<td>
 								<?php
-									$date = $item->valid_to;
-									echo $date > 0 ? HTMLHelper::_('date', $date, Text::_('DATE_FORMAT_GREEK')) : '-';
+									//$date = $item->valid_to;
+									//echo $date > 0 ? HTMLHelper::_('date', $date, Text::_('DATE_FORMAT_GREEK')) : '-';
+                                    echo Ethaae_reportsHelper::getDateGRFormat($item->valid_to);
 								?>
 							</td>
 							<td>
@@ -202,8 +202,8 @@ if (!empty($saveOrder))
 							</td>
 						</tr>
                         <?php if ($showFiles) : ?>
-                        <tr id="files_<?php echo $item->id; ?>" class="delegates" style="display: none;">
-                            <td colspan="20" class="delegates">
+                        <tr id="files_<?php echo $item->id; ?>" class="files">
+                            <td colspan="20" >
                                 <?php include 'files.php'; ?>
                             </td>
                         </tr>
@@ -228,9 +228,10 @@ if (!empty($saveOrder))
 
     function toggleMembers(id) {
         el = document.getElementById("files_"+id);
-        js(el).slideToggle( "slow", function() {
-            // Animation complete.
-        });
+        js(el).toggleClass( "open" );
+        // js(el).slideToggle( "slow", function() {
+        //     js(el).toggleClass( "open" );
+        // });
     }
 
 </script>

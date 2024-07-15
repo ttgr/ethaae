@@ -426,6 +426,7 @@ class ReportModel extends AdminModel
             "fk_other_unit_id" => $data['fk_other_unit_id'],
         ];
         $data['title'] = Ethaae_reportsHelper::getUnitInfo($data['fk_unit_id'])->title;
+        $data['fk_parent_id'] = Ethaae_reportsHelper::getUnitInfo($data['fk_unit_id'])->parentunitid;
 
 
 

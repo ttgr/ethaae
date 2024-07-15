@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<metadata>
+	<layout title="COM_ETHAAE_REPORTS_TITLE_LIST_VIEW_REPORTS" option="View">
+        <message>
+                        <![CDATA[COM_ETHAAE_REPORTS_TITLE_LIST_VIEW_REPORTS_DESC]]>
+        </message>
+	</layout>
+    <fields name="request">
+        <fieldset name="request">
+            <field
+                    name="reporttype"
+                    query="SELECT id, `name` as title FROM #__ethaae_report_types ORDER BY name ASC"
+                    type="sql"
+                    key_field="id"
+                    value_field="title"
+                    label="Είδος Αναφοράς"
+                    required="true"
+                    description=""
+                    default=""
+            >
+                <option value=""> - Επιλέξτε Είδος Αναφοράς -</option>
+            </field>
+        </fieldset>
+    </fields>
+</metadata>

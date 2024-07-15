@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+    <fields name="filter">
+        <field name="search" type="text" hint="COM_ETHAAE_REPORTS_SEARCH_FILTER_SUBMIT"
+               label="COM_USERS_FILTER_SEARCH_DESC"
+               class="js-stools-search-string" />
+
+<field name="fk_unit_id"
+       type="sql"
+       label="COM_ETHAAE_REPORTS_FORM_LBL_REPORT_FK_UNIT_ID"
+       query="SELECT `id` AS `id`, `title_el` AS val FROM `#__ethaae_institutes_structure`"
+       header="COM_ETHAAE_REPORTS_REPORTS_FK_UNIT_ID_FILTER"
+       key_field="id"
+       value_field="val"
+       class="inputbox"
+       onchange="this.form.submit()"
+       translate="true"
+/>
+
+
+    </fields>
+    <fields name="list">
+       <field name="limit"
+               type="limitbox"
+               label="COM_ETHAAE_REPORTS_LIST_LIMIT"
+               description="COM_ETHAAE_REPORTS_LIST_LIMIT_DESC"
+               class="input-mini"
+               default="25"
+               onchange="this.form.submit();"
+        />
+
+    </fields>
+</form>
