@@ -14,9 +14,20 @@
 		<fields name="params">
 			<fieldset name="basic">
 				<field
-						name="api_url"
+						name="api_units_url"
 						type="text"
-						label="ETHAAE API Url"
+						label="ETHAAE API Url: Get Units"
+						description=""
+						default=""
+						required="true"
+						filter="string"
+						class="input-xxlarge"
+				/>
+
+				<field
+						name="api_unittypes_url"
+						type="text"
+						label="ETHAAE API Url: Get Units Types"
 						description=""
 						default=""
 						required="true"

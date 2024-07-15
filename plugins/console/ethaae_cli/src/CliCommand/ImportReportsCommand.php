@@ -79,11 +79,11 @@ class ImportReportsCommand extends AbstractCommand
                     break;
                 case 2:
                     $report->fk_unit_id = ArrayHelper::getValue($institutes,$item->d_hqacode,0);
-                    $report->title = $item->p_title;
+                    $report->title = $item->d_title;
                     break;
                 case 4:
                     $report->fk_unit_id = ArrayHelper::getValue($institutes,$item->p_hqacode,0);
-                    $report->title = $item->d_title;
+                    $report->title = $item->p_title;
                     break;
                 default:
                     $symfonyStyle->error('Error Report Type ID');
@@ -111,6 +111,7 @@ class ImportReportsCommand extends AbstractCommand
                 $report->session_date = $item->session_date;
                 $report->valid_from = $item->valid_from;
                 $report->valid_to = $item->valid_to;
+                $report->fk_parent_id = $this->getUnitParentID($report->fk_unit_id,$db);
                 $report->params = [
                     "fk_reporttype_id" => $item->fk_reporttype_id,
                     "fk_institute_id" => ArrayHelper::getValue($institutes,$item->i_hqacode,0),
@@ -139,7 +140,7 @@ class ImportReportsCommand extends AbstractCommand
     protected function importFiles(SymfonyStyle $symfonyStyle,$db,$report) {
 
         $query = "INSERT INTO #__ethaae_reports_files (fk_report_id,rid,type,name,path,size,ordering,caption,fk_file_id,language,hits)
-                SELECT item_id as fk_report_id,rid,type,name,path,size,ordering,caption,IF(image = '' OR image = 'null',1,image) as fk_file_id,language,hits FROM `#__adip_attachments_files` where item_id = ".$db->quote($report->id);
+                SELECT item_id as fk_report_id,rid,type,name,path,size,ordering,IF(caption='',name,caption) as capt,IF(image = '' OR image = 'null',1,image) as fk_file_id,IF(language = '*','el-GR',language) as lang,hits FROM `#__adip_attachments_files` where item_id = ".$db->quote($report->id);
         $db->setQuery($query);
         try {
             $db->execute();
@@ -149,6 +150,18 @@ class ImportReportsCommand extends AbstractCommand
             file_put_contents(JPATH_SITE.'/logs/import_reports.log', print_r($db->replacePrefix((string) $query),true).PHP_EOL , FILE_APPEND | LOCK_EX);
             file_put_contents(JPATH_SITE.'/logs/import_reports.log', $e->getCode()." ".$e->getMessage().PHP_EOL , FILE_APPEND | LOCK_EX);
         }
+    }
+
+    protected function getUnitParentID($unitID,$db) {
+        $query = $db
+            ->getQuery(true)
+            ->select('parentunitid')
+            ->from($db->quoteName('#__ethaae_institutes_structure'))
+            ->where($db->quoteName('id') . " = " . $db->quote($unitID));
+
+// Reset the query using our newly populated query object.
+        $db->setQuery($query);
+        return $db->loadResult();
     }
 
     protected function truncateTable($table,$db) {
