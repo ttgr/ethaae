@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension type="module" version="3.1" client="site" method="upgrade">
+	<name>mod_adip_reports</name>
+	<author>Tasos Triantis</author>
+	<creationDate>July 2004</creationDate>
+	<copyright>Copyright (C) 2019 Open Source Matters. All rights reserved.</copyright>
+	<license>GNU General Public License version 2 or later; see LICENSE.txt</license>
+	<authorEmail>tasos.tr@gmail.com</authorEmail>
+	<authorUrl>www.cannibal.gr</authorUrl>
+	<version>1.0.0</version>
+	<description>MOD_ADIP_REPORTS_XML_DESCRIPTION</description>
+	<files>
+		<filename module="mod_adip_reports">mod_adip_reports.php</filename>
+		<folder>tmpl</folder>
+		<filename>helper.php</filename>
+	</files>
+	<languages>
+		<language tag="en-GB">en-GB.mod_adip_reports.ini</language>
+		<language tag="en-GB">en-GB.mod_adip_reports.sys.ini</language>
+	</languages>
+	<config>
+		<fields name="params">
+			<fieldset name="basic" addfieldpath="Ethaaereports\Component\Ethaae_reports\Administrator\Field">
+				<field name="reporttype"
+					   type="sql"
+					   label="MOD_ADIP_FORM_LBL_REPORT_FK_REPORTTYPE_ID"
+					   description="MOD_ADIP_FORM_LBL_REPORT_FK_REPORTTYPE_ID"
+				       query="SELECT id,name FROM `#__ethaae_report_types`"
+					   key_field="id"
+					   value_field="name"
+						class="inputbox"
+
+				/>
+
+				<field
+					name="count"
+					type="number"
+					label="MOD_ADIP_LATEST_NEWS_FIELD_COUNT_LABEL"
+					description="MOD_ADIP_LATEST_NEWS_FIELD_COUNT_LABEL"
+					default="5"
+					filter="integer"
+				/>
+
+
+				<field
+					name="ordering"
+					type="list"
+					label="MOD_ADIP_LATEST_NEWS_FIELD_ORDERING_LABEL"
+					description="MOD_ADIP_LATEST_NEWS_FIELD_ORDERING_LABEL"
+					default="p_dsc"
+					>
+					<option value="id_dsc">MOD_ADIP_LATEST_NEWS_VALUE_RECENT_ID</option>
+					<option value="c_dsc">MOD_ADIP_LATEST_NEWS_VALUE_RECENT_ADDED</option>
+					<option value="sess_dsc">MOD_ADIP_LATEST_NEWS_VALUE_SESSION_DATE</option>
+					<option	value="random">MOD_ADIP_LATEST_NEWS_VALUE_RECENT_RAND</option>
+				</field>
+
+				<field
+						name="show_more_url"
+						type="menuitem"
+						default=""
+						label="MOD_ADIP_LATEST_NEWS_FIELD_ΜΟΡΕ_LABEL"
+						description="MOD_ADIP_LATEST_NEWS_FIELD_ΜΟΡΕ_LABEL"
+				/>
+
+			</fieldset>
+
+			<fieldset name="advanced">
+				<field
+					name="layout"
+					type="modulelayout"
+					label="JFIELD_ALT_LAYOUT_LABEL"
+					description="JFIELD_ALT_MODULE_LAYOUT_DESC"
+				/>
+
+				<field
+					name="moduleclass_sfx"
+					type="textarea"
+					label="COM_MODULES_FIELD_MODULECLASS_SFX_LABEL"
+					description="COM_MODULES_FIELD_MODULECLASS_SFX_DESC"
+					rows="3"
+				/>
+
+				<field
+					name="cache"
+					type="list"
+					label="COM_MODULES_FIELD_CACHING_LABEL"
+					description="COM_MODULES_FIELD_CACHING_DESC"
+					default="1"
+					filter="integer"
+					>
+					<option value="1">JGLOBAL_USE_GLOBAL</option>
+					<option value="0">COM_MODULES_FIELD_VALUE_NOCACHING</option>
+				</field>
+
+				<field
+					name="cache_time"
+					type="number"
+					label="COM_MODULES_FIELD_CACHE_TIME_LABEL"
+					description="COM_MODULES_FIELD_CACHE_TIME_DESC"
+					default="900"
+					filter="integer"
+				/>
+
+				<field
+					name="cachemode"
+					type="hidden"
+					default="static"
+					>
+					<option value="static"></option>
+				</field>
+			</fieldset>
+		</fields>
+	</config>
+</extension>
