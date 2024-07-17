@@ -28,6 +28,11 @@ $wa =  $this->document->getWebAssetManager();
 $wa->useStyle('com_ethaae_reports.admin')
     ->useScript('com_ethaae_reports.admin');
 
+$wa->useScript('keepalive')
+    ->useScript('joomla.dialog-autocreate')
+    ->useScript('joomla.dialog');
+
+
 $user      = Factory::getApplication()->getIdentity();
 $userId    = $user->get('id');
 $listOrder = $this->state->get('list.ordering');
@@ -153,7 +158,7 @@ if (!empty($saveOrder))
                                         'data-joomla-dialog'    => htmlspecialchars(json_encode($popupOptions, JSON_UNESCAPED_SLASHES), ENT_COMPAT, 'UTF-8'),
                                     ],
                                 );
-                                    //echo $link;
+                                    echo $link;
                                 ?>
 							</td>
                             <td>

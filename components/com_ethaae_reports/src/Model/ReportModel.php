@@ -21,6 +21,7 @@ use \Joomla\CMS\Object\CMSObject;
 use \Joomla\CMS\User\UserFactoryInterface;
 use Joomla\Utilities\IpHelper;
 use \Ethaaereports\Component\Ethaae_reports\Site\Helper\Ethaae_reportsHelper;
+use \Joomla\CMS\Uri\Uri;
 
 /**
  * Ethaae_reports model.
@@ -414,8 +415,13 @@ class ReportModel extends ItemModel
 
             $db->insertObject("#__ethaae_reports_files_user_download",$object);
 
-            $this->output_file( JPATH_SITE.$file->path, $file->caption, $file->type);
+            //Tasos Normally this is the one should be correct
+            //$this->output_file( JPATH_SITE.$file->path, $file->caption, $file->type);
 
+            //Tasos This is to allow Html5Lightbox to allow popup viewing of PDFs
+            $link = Uri::root().$file->path;
+            $app->redirect($link);
+            die();
         } else {
             $app->enqueueMessage(Text::_('JGLOBAL_AUTH_ACCESS_DENIED'), 'error');
         }

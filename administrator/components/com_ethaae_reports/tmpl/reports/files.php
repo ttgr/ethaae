@@ -18,6 +18,8 @@ $session = Factory::getApplication()->getSession();
 $sid = md5($session->getId());
 
 
+
+
 ?>
 
 
@@ -49,28 +51,46 @@ $sid = md5($session->getId());
     <?php
     $i = 0;
     foreach ($item->files as $f): ?>
-    <?php $flink = Uri::root()."index.php?option=com_ethaae_reports&task=report.download&id=".md5($f->id)."&sid=".$sid; ?>
+    <?php
+        $flink = Uri::root()."index.php?option=com_ethaae_reports&task=report.download&id=".md5($f->id)."&sid=".$sid;
+        $popupOptions = [
+            'popupType'  => 'iframe',
+            'textHeader' => $f->caption,
+            'src'        => $flink,
+        ];
+
+        $link = HTMLHelper::_(
+            'link',
+            '#',
+            $f->caption,
+            [
+                'id'                 => 'show-info-'.$f->id,
+                'class'                 => 'alert-link',
+                'data-joomla-dialog'    => htmlspecialchars(json_encode($popupOptions, JSON_UNESCAPED_SLASHES), ENT_COMPAT, 'UTF-8'),
+            ],
+        );
+
+        //$flink = Uri::root()."index.php?option=com_ethaae_reports&task=report.download&id=".md5($f->id)."&sid=".$sid;
+    ?>
 
         <tr class="row<?php echo $i % 2; ?>">
             <td class='left' style="width:3%;">
                 &nbsp;
             </td>
 
-            <td class="link"  style="width:10%;" >
-                <a href="<?php echo $flink; ?>">
-                    <?php echo $f->caption; ?>
-                </a>
+            <td class="link" >
+                <?php echo $link; ?>
             </td>
-            <td class="link"  style="width:20%;" >
+            <td class="link"  >
                 <?php echo $f->path; ?>
             </td>
-            <td class="link" style="width:5%;">
+            <td class="link" >
                 <?php echo $f->ftype; ?>
             </td>
-            <td class="link center"  style="width:2%;">
+            <td class="link center"  >
                 <?php echo $f->langImage; ?>
             </td>
-            <td class="link center" style="width:2%;">
+            <td class="link center">
                 <?php echo HTMLHelper::_('jgrid.published', $f->state, $i, 'reports.', false, 'cb');  ?>
             </td>
         </tr>

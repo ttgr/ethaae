@@ -29,7 +29,7 @@ $sid = md5($session->getId());
         <li class="files"  >
             <?php
             ?>
-                    <a class="hasTooltip" data-bs-placement="top" href="<?php echo $flink; ?>" data-bs-original-title="<?php echo $f->ftype; ?>">
+                    <a class="hasTooltip html5lightbox" data-bs-placement="top" href="<?php echo $flink; ?>" data-bs-original-title="<?php echo $f->ftype; ?>">
                         <?php echo $f->langImage; ?>
                     </a>
         </li>
