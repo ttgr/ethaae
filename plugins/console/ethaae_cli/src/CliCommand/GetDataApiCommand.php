@@ -7,7 +7,7 @@
  * @license     A "Slug" license name e.g. GPL2
  */
 
-namespace ETHAAE\Plugin\Console\ethaae\CliCommand;
+namespace ETHAAE\Plugin\Console\Ethaae\CliCommand;
 
 defined('_JEXEC') or die;
 
