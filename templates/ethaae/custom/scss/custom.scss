@@ -151,45 +151,47 @@ body {
 
 //Frotnpage Filters
 
-.js-stools-container-filters.frontpage input {
-  border: 1px solid #808080;
-  border-radius: 4px;
-  padding: 0 5px;
-  margin: 0;
-  line-height: 27px;
+.form-select {
+  &.inputbox {
+    max-width: 300px;
+  }
 }
 
 .js-stools .chzn-container.js-stools .chzn-container-single .chzn-single span {
   overflow: hidden;
 }
 
-div[id^="filter_"][id$="_chzn"] {
-  width: auto !important;
+
+.js-stools-container-bar {
+  padding: 3rem 0 1rem 0;
+   &.frontpage {
+     float: unset;
+     .btn-wrapper {
+       float:right;
+       margin-left: 1rem;
+     }
+   }
 }
 
-
-.js-stools-container-bar.frontpage {
-  float: unset;
-}
-.js-stools-container-bar.frontpage .btn-wrapper {
-  float:right;
+.container .row .col .control-group {
+  margin:2px 0;
 }
 
-#g-page-surround .btn.btn-primary,
-#g-page-surround .btn.btn-success,
-#g-page-surround .btn.submit {
-  background-color: #f49e2e;
-  color: #ffffff;
-  border:none;
-}
-
-#g-page-surround .btn.btn-success:focus,
-#g-page-surround .btn.btn-success:hover,
-#g-page-surround .btn.btn-primary:focus,
-#g-page-surround .btn.btn-primary:hover,
-#g-page-surround .btn.submit:focus,
-#g-page-surround .btn.submit:hover {
-  background-color: #808080;
+#g-page-surround {
+  .btn {
+      border:1px solid #818181;
+      &.btn-primary,
+      &.btn-success,
+      &.submit {
+        background-color: #f49e2e;
+        color: #ffffff;
+        border:none;
+      }
+    &:focus,
+    &:hover{
+      background-color: #808080;
+    }
+  }
 }
 
 
@@ -952,12 +954,20 @@ ul.breadcrumb li + li::after {
   }
 }
 
+
+.table-total-rows {
+  font-size: 0.8rem;
+  color: #113b59;
+  font-weight: bold;
+  text-align: center;
+}
+
 //Table Styling of the reports
 
 .table-responsive table {
   border:0;
   border-collapse: collapse;
-  margin:20px 0 0 0;
+  margin:0;
   padding: 0;
   width: 100%;
 }
@@ -971,7 +981,7 @@ ul.breadcrumb li + li::after {
 
 .table-responsive table th,
 .table-responsive table td {
-  padding: .625em;
+  padding: 2rem 0.625rem;
   background-color: unset !important;
   border:0;
   font-size: 0.9rem;
@@ -1002,6 +1012,10 @@ ul.breadcrumb li + li::after {
 .table-responsive table th {
   font-size: .85em;
   letter-spacing: .1em;
+  &.files {
+    text-align: center;
+    min-width: 150px;
+  }
 }
 
 .table-responsive table tr ul {
@@ -1009,6 +1023,27 @@ ul.breadcrumb li + li::after {
   margin: 0;
   padding: 0;
   overflow: hidden;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-flex-direction: row;
+  flex-direction: row;
+  -webkit-flex-wrap: nowrap;
+  flex-wrap: nowrap;
+  -webkit-justify-content: center;
+  justify-content: center;
+  -webkit-align-content: stretch;
+  align-content: stretch;
+  -webkit-align-items: flex-start;
+  align-items: flex-start;
+  li {
+    margin-right: 10px;
+    -webkit-order: 0;
+    order: 0;
+    -webkit-flex: 0 1 20px;
+    flex: 0 1 20px;
+    -webkit-align-self: auto;
+    align-self: auto;
+  }
 }
 
 .table-responsive table tr td.files ul li {
