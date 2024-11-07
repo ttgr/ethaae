@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form addfieldprefix="Adip\Component\Adip\Administrator\Field">
+  <fieldset>
+    <field name="id" type="text" readonly="true" class="readonly" default="0" description="JGLOBAL_FIELD_ID_DESC"/>
+    <field name="ordering"/>
+    <field name="state" default="1" type="list" label="JSTATUS" description="JFIELD_PUBLISHED_DESC" class="inputbox" size="1">
+      <option value="1">JPUBLISHED</option>
+      <option value="0">JUNPUBLISHED</option>
+      <option value="2">JARCHIVED</option>
+      <option value="-2">JTRASHED</option>
+    </field>
+    <field name="checked_out" type="hidden" filter="unset"/>
+    <field name="checked_out_time" default="0000-00-00 00:00:00" type="hidden" filter="unset"/>
+    <field name="created_by" type="createdby" default="0" label="JGLOBAL_FIELD_CREATED_BY_LABEL" description="JGLOBAL_FIELD_CREATED_BY_DESC" hidden="true" hint="COM_ADIP_FORM_LBL_REPORT_CREATED_BY"/>
+    <field name="modified_by" type="modifiedby" default="0" label="JGLOBAL_FIELD_MODIFIED_BY_LABEL" description="JGLOBAL_FIELD_MODIFIED_BY_DESC" hidden="true" hint="COM_ADIP_FORM_LBL_REPORT_MODIFIED_BY"/>
+    <field name="created" type="timecreated" label="COM_ADIP_FORM_LBL_REPORT_CREATED" description="COM_ADIP_FORM_DESC_REPORT_CREATED" hidden="true" hint="COM_ADIP_FORM_LBL_REPORT_CREATED"/>
+    <field name="modified" type="timeupdated" label="COM_ADIP_FORM_LBL_REPORT_MODIFIED" description="COM_ADIP_FORM_DESC_REPORT_MODIFIED" hidden="true" hint="COM_ADIP_FORM_LBL_REPORT_MODIFIED"/>
+    <field name="fk_reporttype_id"
+           type="foreignkey"
+           label="COM_ADIP_FORM_LBL_REPORT_FK_REPORTTYPE_ID"
+           description="COM_ADIP_FORM_DESC_REPORT_FK_REPORTTYPE_ID"
+           default="1"
+           input_type="list"
+           table="#__adip_report_types"
+           key_field="id"
+
+           translate="true"
+           value_field="name"
+           hide_trashed="1"
+           hide_unpublished="1"
+           hide_archived="1"
+           message="Επιλέξτε Είδος Έκθεσης"
+           layout="joomla.form.field.list-fancy-select"
+           onchange="displayFields(this.value)"
+    />
+    <field name="fk_institute_id"
+           type="foreignkey"
+           label="COM_ADIP_FORM_LBL_REPORT_FK_INSTITUTE_ID"
+           description="COM_ADIP_FORM_DESC_REPORT_FK_INSTITUTE_ID"
+           default=""
+           input_type="list"
+           table="#__adip_institutions"
+           key_field="id"
+           translate="false"
+           value_field="title"
+           hide_trashed="1"
+           required="true"
+           onchange="getDepartments(this.value)"
+    >
+      <option value="">COM_ADIP_SCHOOLS_FK_INSTITUDE_ID_FILTER</option>
+    </field>
+    <field name="fk_deprtement_id"
+           type="foreignkey"
+           label="COM_ADIP_FORM_LBL_REPORT_FK_DEPRTEMENT_ID"
+           description="COM_ADIP_FORM_DESC_REPORT_FK_DEPRTEMENT_ID"
+           default=""
+           input_type="list"
+           table="#__adip_all_departments"
+           key_field="dep_id"
+           translate="false"
+           value_field="dep_title"
+           value_multiple = "0"
+           value_field_multiple ="dep_id,parent_type_id"
+           separator="-"
+           condition="dep_id = 0"
+           hide_trashed="1"
+           showon="fk_reporttype_id:2,4"
+           onchange="getProgrammes(this.value)"
+    >
+      <option value="">COM_ADIP_REPORTS_FK_DEPRTEMENT_ID_FILTER</option>
+    </field>
+
+
+    <field name="fk_programme_id"
+           type="foreignkey"
+           label="COM_ADIP_FORM_LBL_REPORT_FK_PROGRAMME_ID"
+           description="COM_ADIP_FORM_DESC_REPORT_FK_PROGRAMME_ID"
+           default=""
+           input_type="list"
+           table="#__adip_programmes_list"
+           key_field="prog_id"
+           value_field="prog_name"
+           translate="false"
+           hide_trashed="1"
+           value_multiple="1"
+           value_field_multiple="prog_type,prog_name"
+           separator=" :: "
+           condition="prog_id = 0"
+           showon="fk_reporttype_id:4"
+    >
+      <option value="">COM_ADIP_REPORTS_FK_PROGRAMME_ID_FILTER</option>
+    </field>
+
+    <field name="academic_greek" default="0" type="list" label="COM_ADIP_FORM_LBL_REPORT_ACADEMIC_GREEK" description="COM_ADIP_FORM_DESC_REPORT_ACADEMIC_GREEK" hint="COM_ADIP_FORM_LBL_REPORT_ACADEMIC_GREEK">
+      <option value="0">COM_ADIP_REPORTS_ACADEMIC_GREEK_OPTION_0</option>
+      <option value="1">COM_ADIP_REPORTS_ACADEMIC_GREEK_OPTION_1</option>
+      <option value="2">COM_ADIP_REPORTS_ACADEMIC_GREEK_OPTION_2</option>
+    </field>
+    <field name="session_num" size="20" maxlength="20" filter="safehtml" type="text" label="COM_ADIP_FORM_LBL_REPORT_SESSION_NUM" description="COM_ADIP_FORM_DESC_REPORT_SESSION_NUM" hint="COM_ADIP_FORM_LBL_REPORT_SESSION_NUM" showon="fk_reporttype_id:3,4"/>
+    <field name="report_year" size="4" maxlength="4" filter="int" type="text" required="true" label="COM_ADIP_FORM_LBL_REPORT_REPORT_YEAR" description="COM_ADIP_FORM_DESC_REPORT_REPORT_YEAR" hint="COM_ADIP_FORM_LBL_REPORT_REPORT_YEAR"/>
+    <field name="session_date" class="inputbox" format="%d/%m/%Y" timeformat="12" filter="none" translateformat="false" showtime="false" singleheader="false" todaybutton="false" weeknumbers="false" filltable="false" type="calendar" label="COM_ADIP_FORM_LBL_REPORT_SESSION_DATE" description="COM_ADIP_FORM_DESC_REPORT_SESSION_DATE" hint="COM_ADIP_FORM_LBL_REPORT_SESSION_DATE" showon="fk_reporttype_id:3,4"/>
+    <field name="valid_from" class="inputbox" format="%d/%m/%Y" timeformat="12" filter="server_utc" translateformat="false" showtime="false" singleheader="false" todaybutton="false" weeknumbers="false" filltable="false" type="calendar" label="COM_ADIP_FORM_LBL_REPORT_VALID_FROM" description="COM_ADIP_FORM_DESC_REPORT_VALID_FROM" hint="COM_ADIP_FORM_LBL_REPORT_VALID_FROM" showon="fk_reporttype_id:3,4"/>
+    <field name="valid_to" class="inputbox" format="%d/%m/%Y" timeformat="12" filter="server_utc" translateformat="false" showtime="false" singleheader="false" todaybutton="false" weeknumbers="false" filltable="false" type="calendar" label="COM_ADIP_FORM_LBL_REPORT_VALID_TO" description="COM_ADIP_FORM_DESC_REPORT_VALID_TO" hint="COM_ADIP_FORM_LBL_REPORT_VALID_TO" showon="fk_reporttype_id:3,4"/>
+    <field name="dep_type_id" type="hidden" value=""/>
+    <field name="version_note" type="text" label="JGLOBAL_FIELD_VERSION_NOTE_LABEL" description="JGLOBAL_FIELD_VERSION_NOTE_DESC" class="inputbox" size="45" labelclass="control-label"/>
+
+  </fieldset>
+</form>

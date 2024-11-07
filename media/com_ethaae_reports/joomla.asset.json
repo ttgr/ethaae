@@ -21,6 +21,18 @@
       }
     },
     {
+      "name": "com_ethaae_reports.dialog-autocreate",
+      "type": "script",
+      "uri": "com_ethaae_reports/joomla-dialog-autocreate.min.js",
+      "attributes": {
+        "type": "module"
+      },
+      "dependencies": [
+        "joomla.dialog"
+      ],
+      "version": "44fd47"
+    },
+    {
         "name": "com_ethaae_reports.list",
         "type": "style",
         "uri": "com_ethaae_reports/list.css"

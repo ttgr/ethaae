@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form addfieldprefix="Adip\Component\Adip\Administrator\Field">
+    <fieldset>
+        <field name="id" type="text" readonly="true" class="readonly" default="0" description="JGLOBAL_FIELD_ID_DESC"/>
+        <field name="publish" default="1" type="list" label="JSTATUS" description="JFIELD_PUBLISHED_DESC" class="inputbox" size="1">
+            <option value="1">JPUBLISHED</option>
+            <option value="0">JUNPUBLISHED</option>
+        </field>
+
+        <field
+                name="caption"
+                size="255"
+                maxlength="4"
+                type="text"
+                required="true"
+                label="COM_ADIP_FORM_LBL_REPORT_REPORT_YEAR"
+                description="COM_ADIP_FORM_DESC_REPORT_REPORT_YEAR"
+                hint="COM_ADIP_FORM_LBL_REPORT_REPORT_YEAR"
+        />
+
+        <field
+                name="language"
+                type="language"
+                client="site"
+                default="el-GR"
+                label="Select a language"
+                description=""
+        />
+        <field name="image"
+               type="foreignkey"
+               label="COM_ADIP_FORM_LBL_REPORT_FK_REPORTTYPE_ID"
+               description="COM_ADIP_FORM_DESC_REPORT_FK_REPORTTYPE_ID"
+               default="1"
+               input_type="list"
+               table="#__adip_attachements_filetype"
+               key_field="id"
+               value_field="name"
+               message="Επιλέξτε Είδος Αρχείου"
+        />
+
+    </fieldset>
+</form>

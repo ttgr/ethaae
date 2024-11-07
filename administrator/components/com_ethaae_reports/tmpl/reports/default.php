@@ -147,7 +147,7 @@ if (!empty($saveOrder))
                                 <?php
                                 $popupOptions = [
                                     'popupType'  => 'iframe',
-                                    'src'        => 'index.php?option=com_ethaae_units&view=institutesstructure&layout=view&' . Session::getFormToken() . '=1&id='.$item->fk_unit_id,
+                                    'src'        => 'index.php?option=com_ethaae_units&view=institutesstructure&layout=view&' . Session::getFormToken() . '=1&id='.$item->fk_unit_id.'&tmpl=component',
                                 ];
                                 $link = HTMLHelper::_(
                                     'link',

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension version="2.5" type="plugin" group="content" method="upgrade">
+    <name>BIE Expo Image Gallery</name>
+    <author>Tasos Triantis</author>
+    <creationDate>22/09/2023</creationDate>
+    <copyright>Copyright (C) 2023 bie-paris.org</copyright>
+    <license>GNU General Public License version 2 or later; see LICENSE.txt</license>
+    <authorEmail>tasos@bie-paris.org</authorEmail>
+    <authorUrl>https://www.bie-paris.org</authorUrl>
+    <version>4.0</version>
+    <description>PLG_BIE_EXPOIMAGEGALLERY_XML_DESCRIPTION</description>
+    
+    
+    <scriptfile>install.php</scriptfile>
+
+    <files>
+        <filename plugin="expoimagegallery">expoimagegallery.php</filename>
+        <filename>index.html</filename>
+        <filename>install.php</filename>
+        <folder>language</folder>
+    </files>
+
+    <config>
+        <fields name="params">
+
+            <fieldset name="basic">
+            <field name="width" type="text" size="9" default="700" label="PLG_BIE_EXPOIMAGEGALLERY_WIDTH_LABEL" description="PLG_BIE_EXPOIMAGEGALLERY_WIDTH_LABEL" />
+            <field name="height" type="text" size="9" default="269" label="PLG_BIE_EXPOIMAGEGALLERY_HEIGHT_LABEL" description="PLG_BIE_EXPOIMAGEGALLERY_HEIGHT_LABEL" />
+            <field name="folder_path" type="text" size="9" default="images/galleries" label="PLG_BIE_EXPOIMAGEGALLERY_GALLERYPATH_LABEL" description="PLG_BIE_EXPOIMAGEGALLERY_GALLERYPATH_LABEL" />
+            <field name="is_full" type="radio" label="PLG_BIE_EXPOIMAGEGALLERY_ISFULL_LABEL" description="PLG_BIE_EXPOIMAGEGALLERY_ISFULL_LABEL" default="0">
+                    <option value="0">No</option>
+                    <option value="1">Yes</option>
+            </field>                               
+            </fieldset>
+
+        </fields>
+    </config>
+    
+</extension>

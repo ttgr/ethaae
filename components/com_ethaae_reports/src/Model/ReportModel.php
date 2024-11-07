@@ -418,16 +418,57 @@ class ReportModel extends ItemModel
             //Tasos Normally this is the one should be correct
             //$this->output_file( JPATH_SITE.$file->path, $file->caption, $file->type);
 
+            $this->output_file_in_browser(JPATH_SITE.$file->path, $file->caption, $file->type);
+
+
             //Tasos This is to allow Html5Lightbox to allow popup viewing of PDFs
-            $link = Uri::root().$file->path;
-            $app->redirect($link);
-            die();
+//            $link = Uri::root().$file->path;
+//            $app->redirect($link);
+//            die();
         } else {
             $app->enqueueMessage(Text::_('JGLOBAL_AUTH_ACCESS_DENIED'), 'error');
         }
 
 
         return true;
+    }
+
+    private function output_file_in_browser($file,$name, $mime_type='')
+    {
+        /* Detect the MIME type | Check in array */
+        $known_mime_types=array(
+            "pdf" => "application/pdf",
+            "txt" => "text/plain",
+            "html" => "text/html",
+            "htm" => "text/html",
+            "exe" => "application/octet-stream",
+            "zip" => "application/zip",
+            "doc" => "application/msword",
+            "xls" => "application/vnd.ms-excel",
+            "ppt" => "application/vnd.ms-powerpoint",
+            "gif" => "image/gif",
+            "png" => "image/png",
+            "jpeg"=> "image/jpg",
+            "jpg" =>  "image/jpg",
+            "php" => "text/plain"
+        );
+
+        if($mime_type==''){
+            $file_extension = strtolower(substr(strrchr($file,"."),1));
+            if(array_key_exists($file_extension, $known_mime_types)){
+                $mime_type=$known_mime_types[$file_extension];
+            } else {
+                $mime_type="application/force-download";
+            };
+        };
+        // Header content type
+        header('Content-type: '.$mime_type);
+        header('Content-Disposition: inline; filename="' . $name . '"');
+        header('Content-Transfer-Encoding: binary');
+        header('Accept-Ranges: bytes');
+        // Read the file
+        readfile($file);
+        exit;
     }
 
     private function output_file($file, $name, $mime_type='') {

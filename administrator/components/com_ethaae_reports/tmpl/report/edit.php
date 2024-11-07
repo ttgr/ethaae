@@ -23,15 +23,14 @@ $user = $app->getIdentity();
 
 $wa = $this->document->getWebAssetManager();
 $wa->useScript('keepalive')
-    ->useScript('form.validate')
-    ->useScript('joomla.dialog-autocreate')
-    ->useScript('joomla.dialog');
+    ->useScript('form.validate');
 HTMLHelper::_('bootstrap.tooltip');
 
 $wa->useStyle('com_ethaae_reports.dropzone')
     ->useStyle('com_ethaae_reports.admin')
     ->useStyle('com_ethaae_reports.form')
     ->useScript('com_ethaae_reports.admin')
+    ->useScript('com_ethaae_reports.dialog-autocreate')
     ->useScript('com_ethaae_reports.dropzone');
 
 $ajaxDepartmentsUri ='index.php?option=com_ethaae_reports&task=reports.getDepartmentsAjax&format=json&' . Session::getFormToken() . '=1';
@@ -171,24 +170,6 @@ $link = HTMLHelper::_(
         }
     }
 
-    var validateForm = function() {
-        Joomla.removeMessages();
-        var fk_unit_id = document.getElementById("jform_fk_unit_id").value;
-        var fk_reporttype_id = document.getElementById("jform_fk_reporttype_id").value;
-        var fk_institute_id = document.getElementById("jform_fk_institute_id").value;
-        var fk_deprtement_id = document.getElementById("jform_fk_deprtement_id").value;
-        var fk_programme_id = document.getElementById("jform_fk_programme_id").value;
-
-        if (!(parseInt(fk_unit_id)> 0)) {
-            const messages = {error: ["Παρακαλώ επιλέξτε Δομή"]};
-            Joomla.renderMessages(messages);
-            return false;
-        }
-
-
-
-        return true;
-    }
 
     var deleteReportFile = function (id) {
         if(confirm('<?php echo Text::_('COM_ETHAAE_REPORTS_FILES_DELETE_FILE');?>')) {
@@ -198,52 +179,29 @@ $link = HTMLHelper::_(
 
     }
 
+    const params = {
+        id      :   "<?php echo $this->item->id;?>",
+        user    :   "<?php echo $user->id;?>",
+    };
+
+    const args = {
+        obj             : 'div#files-attachments',
+        paramName       : 'file',
+        ajaxFoldersUri  : '<?php echo $ajaxFoldersUri ?>',
+        maxSize         : '<?php echo $maxSize;?>',
+        userID          : '<?php echo $user->id;?>',
+        itemID          : '<?php echo $this->item->id;?>',
+        callbackFunc    : 'refreshFileTables',
+        params          :  params,
+    };
+
+    function refreshFileTables(obj) {
+        showFilesListing('<?php echo $ajaxFoldersListingUri;?>');
+    }
+
+
     js(document).ready(function () {
-
-        js("div#files-attachments").dropzone({
-            url: "<?php echo $ajaxFoldersUri;?>",
-            paramName: "file",
-            maxFilesize: <?php echo $maxSize; ?>,
-            autoProcessQueue : true,
-            thumbnailWidth: 40,
-            thumbnailHeight: 40,
-            uploadMultiple:false,
-            parallelUploads:1,
-            error: function(file, err) {
-                file.previewElement.classList.add("dz-error");
-                msg = file.name + ' :: '+ err;
-                this.removeFile(file);
-                const messages = {error: [err]};
-                Joomla.renderMessages(messages);
-                console.log(err);
-            },
-            success: function(file, responseText) {
-                console.log(responseText);
-                file.previewElement.classList.add("dz-success");
-                if(typeof responseText =='object') {
-                    if (responseText.success == true) {
-                        const obj = responseText.data;
-                        const messages = {success: [obj.message]};
-                        Joomla.renderMessages(messages);
-                        showFilesListing('<?php echo $ajaxFoldersListingUri;?>');
-                    } else {
-                        const messages = {error: [responseText.message]};
-                        Joomla.renderMessages(messages);
-                    }
-                } else {
-                    const messages = {error: [responseText]};
-                    Joomla.renderMessages(messages);
-                }
-
-            },
-            addRemoveLinks : false,
-            acceptedFiles: "application/pdf",
-            sending: function(file, xhr, formData) {
-                formData.append("id", "<?php echo $this->item->id;?>");
-                formData.append("user", "<?php echo $user->id;?>");
-            }
-        });
-
+        addDropZone(args);
         js("div#files-attachments").addClass('dropzone');
         showFilesListing('<?php echo $ajaxFoldersListingUri;?>');
 

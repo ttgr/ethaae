@@ -1,0 +1,131 @@
+/**
+ * @version     CVS: 1.1.0
+ * @package     com_ethaae_units_info
+ * @copyright   2024 Tasos Triantis
+ * @license     GNU General Public License version 2 or later; see LICENSE.txt
+ * @author      Tasos Triantis <tasos.tr@gmail.com>
+ */
+.card-wrapper {
+    display: flex;
+    justify-content: space-between;
+}
+ul.institutes {
+    text-align: center;
+    list-style: none;
+
+}
+
+ul.institutes li {
+    margin-bottom: 2em;
+    padding-right: 1rem;
+    padding-left: 1rem;
+    min-height: 200px;
+
+}
+
+
+ul.institutes li .institutes-item-inner {
+    border: 1px solid rgba(0,0,0,0.1);
+    -webkit-box-shadow: 0px 0px 13px 0px rgba(0,0,0,0.1);
+    box-shadow: 0px 0px 13px 0px rgba(0,0,0,0.1);
+    border-radius: 10px;
+    height: 100%;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    position: relative;
+    background-repeat: no-repeat;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: stretch;
+    align-content: normal;
+}
+
+
+.divider {
+    position: relative;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    margin: 3rem auto;
+    width: 100%;
+    font-size: large;
+    font-weight: bold;
+}
+
+.divider::after
+{
+    content: "";
+    flex-basis: 0;
+    flex-grow: 1;
+    max-width: 100%;
+    border-bottom: 1px solid #e9ecef ;
+    margin-left: 0.5rem;
+
+}
+
+.overlay {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 100%;
+    width: 100%;
+    opacity: 0;
+    transition: .5s ease;
+    background-color: #88c6ce;
+}
+
+.overlay:hover {
+    cursor: pointer;
+}
+
+.institutes-item:hover .overlay {
+    opacity: 1;
+}
+
+.text {
+    color: white;
+    font-size: 20px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    text-align: center;
+}
+
+
+span.title {
+    margin-top: 1rem;
+}
+
+.image-gallery {
+    margin-bottom: 3rem;
+}
+
+.article-body p:first-child {
+    margin-top: 0 !important;
+}
+
+
+
+.unit-logo .image-wraper {
+    border: 1px solid rgba(0,0,0,0.1);
+    -webkit-box-shadow: 0px 0px 13px 0px rgba(0,0,0,0.1);
+    box-shadow: 0px 0px 13px 0px rgba(0,0,0,0.1);
+    border-radius: 10px;
+    padding: 2rem;
+    margin: 0 auto;
+    max-width: 200px;
+}
+
+.unit-logo .image-wraper img {
+    display: block;
+    margin: 0 auto;
+
+}

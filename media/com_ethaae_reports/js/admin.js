@@ -214,3 +214,103 @@ var addRowFilesTable = function (obj) {
     '</td>' +
     '</tr>');
 };
+
+
+var addDropZone = function (args) {
+    js(args.obj).dropzone({
+        url: args.ajaxFoldersUri,
+        paramName: args.paramName,
+        maxFilesize: args.maxSize,
+        autoProcessQueue: true,
+        thumbnailWidth: 40,
+        thumbnailHeight: 40,
+        uploadMultiple: false,
+        parallelUploads: 1,
+        error: function (file, err) {
+            file.previewElement.classList.add("dz-error");
+            msg = file.name + ' :: ' + err;
+            this.removeFile(file);
+            const messages = {error: [err]};
+            Joomla.renderMessages(messages);
+            console.log(err);
+        },
+        success: function (file, responseText) {
+//            console.log(responseText);
+            file.previewElement.classList.add("dz-success");
+            if (typeof responseText == 'object') {
+                if (responseText.success == true) {
+                    const obj = responseText.data;
+                    const messages = {[obj.type]: [obj.message]};
+                    Joomla.renderMessages(messages);
+                    //callbackFunction should always take object as a parameter
+                    //In this case should be responseText.data
+                    if (args.hasOwnProperty('callbackFunc')) {
+                        window[args.callbackFunc](obj);
+                    }
+
+                } else {
+                    const messages = {error: [responseText.message]};
+                    Joomla.renderMessages(messages);
+                }
+            } else {
+                const messages = {error: [responseText]};
+                Joomla.renderMessages(messages);
+            }
+
+        },
+        addRemoveLinks: false,
+        acceptedFiles: "application/pdf",
+        sending: function (file, xhr, formData) {
+            if (args.hasOwnProperty('params')) {
+                for (var paramName in args.params) {
+                    if (args.params.hasOwnProperty(paramName)) {
+                        formData.append(paramName, args.params[paramName]);
+                    }
+                }
+            }
+        }
+    });
+
+}
+
+
+var validateForm = function() {
+    Joomla.removeMessages();
+    var fk_unit_id = document.getElementById("jform_fk_unit_id").value;
+    var report_year = document.getElementById("jform_report_year").value;
+    var report_type_id = document.getElementById("jform_fk_reporttype_id").value;
+    var fk_institute_id = document.getElementById("jform_fk_institute_id").value;
+    var fk_deprtement_id = document.getElementById("jform_fk_deprtement_id").value;
+    var fk_programme_id = document.getElementById("jform_fk_programme_id").value;
+
+    const errors = [];
+    var rslt = true;
+
+    if (!(parseInt(report_type_id)> 0)) {
+        errors.push("Παρακαλώ Επιλέξτε <b>Είδος Αναφοράς</b>");
+        rslt = false;
+    }
+
+
+    if (!(parseInt(fk_unit_id)> 0)) {
+        errors.push("Παρακαλώ Επιλέξτε <b>Δομή</b>");
+        rslt = false;
+    }
+
+    if (typeof report_year === "string" && report_year.trim().length === 0) {
+        errors.push("Παρακαλώ συμπληρώστε το <b>Έτος</b>");
+        rslt = false;
+    }
+
+
+
+
+    if (rslt == false) {
+        const messages = {error: errors};
+        Joomla.renderMessages(messages);
+    }
+    return rslt;
+
+}
+
+

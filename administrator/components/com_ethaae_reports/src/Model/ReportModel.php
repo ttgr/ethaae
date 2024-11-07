@@ -527,24 +527,32 @@ class ReportModel extends AdminModel
                 [
                     'class'                 => 'alert-link',
                     'data-joomla-dialog'    => htmlspecialchars(json_encode($popupOptions, JSON_UNESCAPED_SLASHES), ENT_COMPAT, 'UTF-8'),
-                    'data-checkin-url'      => '',
-                    'data-close-on-message' => '',
-                    'data-reload-on-close'  => '',
+                    'data-callback-func'  => 'refreshFileTables',
                 ],
             );
             $row['editlink'] = $link;
 
 
+            $popupOptions = [
+                'popupType'  => 'iframe',
+                'textHeader' => $row['caption'],
+                'src'        => Uri::root()."index.php?option=com_ethaae_reports&task=report.download&id=".md5($row['id'])."&sid=".$sid
+            ];
             $link = HTMLHelper::_(
                 'link',
-                Uri::root()."index.php?option=com_ethaae_reports&task=report.download&id=".md5($row['id'])."&sid=".$sid,
+                "#",
                 HTMLHelper::_('image', 'com_ethaae_reports/view.png', null, null, true),
                 [
                     'class'                 => 'alert-link',
+                    'data-joomla-dialog'    => htmlspecialchars(json_encode($popupOptions, JSON_UNESCAPED_SLASHES), ENT_COMPAT, 'UTF-8'),
                 ],
             );
 
             $row['downloadlink'] = $link;
+
+
+
+
             $row['editurl'] = Uri::current().$popupOptions['src'];
             $languages = LanguageHelper::getLanguages('lang_code');
             $sefTag = $languages[$row['language']]->sef;

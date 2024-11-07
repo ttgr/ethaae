@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<metadata>
+    <layout title="COM_ETHAAE_UNITS_INFO_TITLE_ITEM_VIEW_INSTITUTESINFO" option="View">
+        <message>
+                        <![CDATA[COM_ETHAAE_UNITS_INFO_TITLE_ITEM_VIEW_INSTITUTESINFO_DESC]]>
+        </message>
+    </layout>
+    <fields name="request">
+        <fieldset 
+            name="request"
+            label="COM_ETHAAE_UNITS_INFO_FIELDSET_ITEM_ID_SELECT_LABEL">
+            <field
+                name="id"
+                query="select
+                    `m`.`id` AS `id`,
+                     concat(`t`.`short_code_el`, ':: ', `i`.`title_el`) AS `name_el`
+                  from
+                      `#__ethaae_institutes_structure` `i`
+                      join `#__ethaae_unit_type` `t` on(`i`.`unit_type_id` = `t`.`id`)
+                      LEFT JOIN #__ethaae_institutes_info m on (i.id = m.fk_unit_id)
+                  where t.grouping=1 AND i.ceasedate is null AND m.id is  not null"
+                type="sql"
+                key_field="id" 
+                value_field="name_el"
+                label="COM_ETHAAE_UNITS_INFO_ITEM_ID_SELECT_LABEL"
+                require="true"
+                description="JGLOBAL_SHOW_TITLE_DESC">
+            </field>
+        </fieldset>
+    </fields>
+</metadata>
