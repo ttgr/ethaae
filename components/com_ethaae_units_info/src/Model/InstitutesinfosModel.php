@@ -144,15 +144,6 @@ class InstitutesinfosModel extends ListModel
 
 			$query->from('`#__ethaae_institutes_info` AS a');
 			
-		// Join over the users for the checked out user.
-		$query->select('uc.name AS uEditor');
-		$query->join('LEFT', '#__users AS uc ON uc.id=a.checked_out');
-
-		// Join over the created by field 'created_by'
-		$query->join('LEFT', '#__users AS created_by ON created_by.id = a.created_by');
-
-		// Join over the created by field 'modified_by'
-		$query->join('LEFT', '#__users AS modified_by ON modified_by.id = a.modified_by');
 		// Join over the foreign key 'fk_unit_id'
 		$query->select(array('i.title_'.$lang.' as name','SUBSTRING(i.title_'.$lang.',1,1) as initial','i.unitcode'));
 		$query->join('LEFT', '#__ethaae_institutes_structure AS i ON i.`id` = a.`fk_unit_id`');

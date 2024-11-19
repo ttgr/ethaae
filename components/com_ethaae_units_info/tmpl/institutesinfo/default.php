@@ -11,22 +11,16 @@
 defined('_JEXEC') or die;
 
 use \Joomla\CMS\HTML\HTMLHelper;
-use \Joomla\CMS\Factory;
-use \Joomla\CMS\Uri\Uri;
-use \Joomla\CMS\Router\Route;
 use \Joomla\CMS\Language\Text;
-use \Joomla\CMS\Session\Session;
-use Joomla\Utilities\ArrayHelper;
 use \Joomla\CMS\Layout\LayoutHelper;
 
-HTMLHelper::_('bootstrap.tooltip');
+//HTMLHelper::_('bootstrap.tooltip');
 HTMLHelper::_('behavior.multiselect');
 HTMLHelper::_('formbehavior.chosen', 'select');
 
 $wa = $this->document->getWebAssetManager();
 $wa->useStyle('com_ethaae_units_info.list');
 
-//dump($this->item);
 $link = HTMLHelper::_('link', $this->item->{'url_'.$this->item->langTag[0]},$this->item->{'url_'.$this->item->langTag[0]}, ['target' => 'helpFrame']);
 
 ?>

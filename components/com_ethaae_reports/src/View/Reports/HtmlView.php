@@ -73,8 +73,6 @@ class HtmlView extends BaseHtmlView
         $this->items = $this->get('Items');
         $this->pagination = $this->get('Pagination');
 
-
-
         // Check for errors.
 		if (count($errors = $this->get('Errors')))
 		{

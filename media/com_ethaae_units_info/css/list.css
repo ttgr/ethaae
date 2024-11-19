@@ -129,3 +129,42 @@ span.title {
     margin: 0 auto;
 
 }
+
+.unit-title {
+    font-weight: bold;
+    color: #000000;
+}
+
+.unit-subtitle {
+    margin-top:0.5rem;
+    font-size: 0.85rem;
+}
+
+.unit-title a {
+    margin-left: 0.5rem;
+}
+.unit-subtitle .fas {
+    margin-right: 0.5rem;
+}
+
+ul.studies-list {
+    justify-content: flex-start !important;
+}
+ul.studies-list li {
+    flex: 0 1 auto !important;
+    text-align: center;
+}
+.studies-title {
+    font-weight: bold;
+    color: #555;
+}
+
+.note {
+    margin-top: 0.5rem;
+    font-size: 0.70rem;
+    color: #555;
+}
+span.certified {
+    color:#88c6ce;
+    font-weight: bold;
+}

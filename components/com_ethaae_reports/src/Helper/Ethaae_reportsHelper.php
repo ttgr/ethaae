@@ -38,7 +38,7 @@ class Ethaae_reportsHelper
 	 *
 	 * @return  array  The files
 	 */
-    public static function getFiles($report_id,$state = "",array $filters = array())
+    public static function getFiles($report,$state = "",array $filters = array())
     {
         $db = Factory::getContainer()->get('DatabaseDriver');
         $query = $db->getQuery(true);
@@ -46,7 +46,7 @@ class Ethaae_reportsHelper
             ->select(array('f.*', 't.name as ftype'))
             ->from($db->quoteName('#__ethaae_reports_files', 'f'))
             ->join('LEFT', '#__ethaae_reports_filetype AS t ON t.`id` = f.`fk_file_id`')
-            ->where($db->quoteName('f.fk_report_id') . ' = ' . $db->quote($db->escape($report_id)));
+            ->where($db->quoteName('f.fk_report_id') . ' = ' . $db->quote($db->escape($report->id)));
 
         if(!empty($state))
             $query->where($db->quoteName('f.state') . ' = ' . $db->quote($state));
@@ -69,6 +69,7 @@ class Ethaae_reportsHelper
             $title = Text::sprintf('COM_ETHAAE_DOWNLOAD_LINK_TIP',$f_title);
             $item->langImage = HTMLHelper::_('image', 'com_ethaae_reports/' . $sefTag . '.png', $languages[$item->language]->title_native, ['title' => $title], true);
             $item->langTitle = $languages[$item->language]->title_native;
+            $item->tooltip = $report->report_type." </br> Έτος Έκθεσης:: ".$report->report_year.'</br>Γλώσσα:: '.$item->langTitle;
         }
 
         return $items;
@@ -78,6 +79,97 @@ class Ethaae_reportsHelper
         $languages = LanguageHelper::getLanguages('lang_code');
         $lang = Factory::getApplication()->getLanguage();
         return $languages[$lang->getTag()]->sef;
+    }
+
+
+    public static function getStudyProgrammesInTotal(array $filters,bool $withReports = false) {
+        $db = Factory::getContainer()->get('DatabaseDriver');
+        $query = $db->getQuery(true);
+        $query
+            ->select(array('s.unit_type_id','s.short_code_el','s.short_code_en','COUNT(*) as totals'))
+            ->from($db->quoteName('#__ethaae_institutes_structure','s'))
+            ->where('s.ceasedate is null')
+            ->group($db->quoteName('s.unit_type_id'))
+            ->order($db->quoteName('s.unit_type_id').' ASC');
+
+        if (!empty($withReports)) {
+            $query->join('inner','#__ethaae_reports AS r ON s.`id` = r.`fk_unit_id`');
+        }
+
+        $filter_fk_unit_id = ArrayHelper::getValue($filters,'fk_unit_id',0);
+        if ($filter_fk_unit_id)
+        {
+            $query->where("s.parentunitid = '".$db->escape($filter_fk_unit_id)."'");
+        }
+        $db->setQuery($query);
+        //Factory::getApplication()->enqueueMessage($db->replacePrefix((string) $query), 'notice');
+        return $db->loadObjectList('unit_type_id');
+    }
+
+    public static function getUnitsQuery(array $filters) {
+        $db = Factory::getContainer()->get('DatabaseDriver');
+        $query = $db->getQuery(true);
+
+        // Select the required fields from the table.
+        $query->select('DISTINCT s.*');
+        $query->select('`s`.`title_el` AS unit_title_el');
+        $query->select('`s`.`title_en` AS unit_title_en');
+        $query->select('`s`.`short_code_el` AS unit_short_code_el');
+        $query->select('`s`.`short_code_en` AS unit_short_code_en');
+        $query->from('`#__ethaae_institutes_structure` AS s');
+        $query->select('`i`.`title_el` AS institute_title_el');
+        $query->select('`i`.`title_en` AS institute_title_en');
+        $query->join('LEFT', '#__ethaae_institutes_structure AS i ON i.`id` = s.`instituteid`');
+
+        $query->select('`p`.`title_el` AS parent_title_el');
+        $query->select('`p`.`title_en` AS parent_title_en');
+        $query->join('LEFT', '#__ethaae_institutes_structure AS p ON p.`id` = s.`parentunitid`');
+        $query->where('s.ceasedate is null');
+
+        // Filtering fk_unit_id
+        $filter_fk_unit_id = ArrayHelper::getValue($filters,'unit_id',0);
+        if ($filter_fk_unit_id)
+        {
+            $query->where("s.`id` = '".$db->escape($filter_fk_unit_id)."'");
+        }
+
+        // Filtering fk_unit_id
+        $filter_fk_institute_id = ArrayHelper::getValue($filters,'instituteid',0);
+        if ($filter_fk_institute_id)
+        {
+            $query->where("s.`instituteid` = '".$db->escape($filter_fk_institute_id)."'");
+        }
+
+        // Filtering fk_parent_id
+
+        $fk_parent_id = ArrayHelper::getValue($filters,'parentunitid',0);
+        if ($fk_parent_id)
+        {
+            $query->where("s.`parentunitid` = '".$db->escape($fk_parent_id)."'");
+        }
+
+        $unit_grouping = ArrayHelper::getValue($filters,'unit_grouping',0);
+        if ($unit_grouping)
+        {
+            $query->where("s.`unit_grouping` = '".$db->escape($unit_grouping)."'");
+        }
+
+        $unit_type_id = ArrayHelper::getValue($filters,'unit_type_id',0);
+        if ($unit_type_id)
+        {
+            $query->where("s.`unit_type_id` = '".$db->escape($unit_type_id)."'");
+        }
+
+        $orderCol  = ArrayHelper::getValue($filters,'ordering','');
+        $orderDirn = ArrayHelper::getValue($filters,'direction','');
+
+        if ($orderCol && $orderDirn)
+        {
+            $query->order($db->escape($orderCol . ' ' . $orderDirn));
+        }
+        //Factory::getApplication()->enqueueMessage($db->replacePrefix((string) $query), 'notice');
+        return $query;
+
     }
 
     public static function getUnityReports(int $fk_unity_id) {
@@ -93,7 +185,7 @@ class Ethaae_reportsHelper
                 'fk_file_id'    =>   1,
             ];
 
-            $item->files = self::getFiles($item->id,1,$filters);
+            $item->files = self::getFiles($item,1,$filters);
         }
         return $items;
     }
@@ -102,23 +194,42 @@ class Ethaae_reportsHelper
     public static  function getUnitDepts(int $fk_unit_id,string $lang) {
         $db = Factory::getContainer()->get('DatabaseDriver');
         $filters = [
-            'fk_institute_id'    =>   $fk_unit_id,
-            'fk_reporttype_id'   =>   2,
+            'instituteid'    =>   $fk_unit_id,
+            'unit_grouping'   =>   2,
+            'unit_type_id'   =>   4,
             'ordering'           =>   'unit_title_'.$lang,
             'direction'           =>   'ASC',
         ];
-        $query = self::getListQuery($filters);
+        $query = self::getUnitsQuery($filters);
         $db->setQuery($query);
         $items = $db->loadObjectList();
         foreach ($items as &$item) {
             $filters = [
-                'fk_file_id'    =>   1,
+                'fk_unit_id'    =>   $item->id,
             ];
-
-            $item->files = self::getFiles($item->id,1,$filters);
+            $item->reports = self::getUnityReports($item->id);
+            $item->StudyProgramsTotals = self::getStudyProgrammesInTotal($filters);
+            $item->StudyProgramsTotalsWithReports = self::getStudyProgrammesInTotal($filters,true);
         }
         return $items;
     }
+
+    public static  function getUnitChildren(int $fk_unit_id,string $lang) {
+        $db = Factory::getContainer()->get('DatabaseDriver');
+        $filters = [
+            'parentunitid'    =>   $fk_unit_id,
+            'ordering'           =>   'unit_type_id',
+            'direction'           =>   'ASC',
+        ];
+        $query = self::getUnitsQuery($filters);
+        $db->setQuery($query);
+        $items = $db->loadObjectList();
+        foreach ($items as &$item) {
+            $item->reports = self::getUnityReports($item->id);
+        }
+        return $items;
+    }
+
 
     protected static function getListQuery(array $filters)
     {
@@ -196,7 +307,7 @@ class Ethaae_reportsHelper
         {
             $query->order($db->escape($orderCol . ' ' . $orderDirn));
         }
-        //Factory::getApplication()->enqueueMessage($db->replacePrefix((string) $query), 'notice');
+//        Factory::getApplication()->enqueueMessage($db->replacePrefix((string) $query), 'notice');
         return $query;
     }
 	/**

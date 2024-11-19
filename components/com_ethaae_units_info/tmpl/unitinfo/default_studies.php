@@ -52,12 +52,11 @@ $sid = md5($session->getId());
 
     <div class="table-responsive">
         <h2 itemprop="headline" class="title divider">
-            <?php echo Text::_('COM_ETHAAE_UNITS_INFO_INSTITUTESINFOS_REPORTS_2_TITLE'); ?>
+            <?php echo Text::_('COM_ETHAAE_UNITS_INFO_INSTITUTESINFOS_REPORTS_3_TITLE'); ?>
         </h2>
 
         <?php if (count($reports) >0 ) : ?>
             <div class="table-total-rows"> <?php echo Text::sprintf('COM_ETHAAE_UNITS_INFO_INSTITUTESINFOS_REPORT_TOTAL_RECORDS',count($reports)); ?></div>
-            <div class="note"><?php echo Text::_('COM_ETHAAE_UNITS_INFO_INSTITUTESINFOS_TABLE_STUDIES_NOTE'); ?></div>
         <?php endif; ?>
 
         <table class="table table-striped" id="reportList">
@@ -81,19 +80,13 @@ $sid = md5($session->getId());
 
                 <tr class="row<?php echo $i % 2; ?>">
                     <td scope="row" data-label="<?php echo Text::_('COM_ETHAAE_UNITS_INFO_INSTITUTESINFOS_TABLE_UNIT_COLUMN'); ?>">
-                        <div class="row-content unit-title">
-                            <?php echo $item->{'unit_title_'.$langSEF}; ?><a class="html5lightbox" href="<?php echo Route::_('index.php?option=com_ethaae_units_info&view=unitinfo&tmpl=component&id='.(int) $item->id); ?>"><i class="fas fa-external-link-alt"></i></a></div>
+                        <div class="row-content">
+                            <?php echo $item->{'parent_title_'.$langSEF} ?></div>
                         </div>
-                        <div class="row-content unit-subtitle">
-                            <i class="fas fa-long-arrow-alt-right"></i><?php echo $item->{'parent_title_'.$langSEF}; ?>
-                        </div>
-
                     </td>
                     <td scope="row" data-label="<?php echo Text::_('COM_ETHAAE_UNITS_INFO_INSTITUTESINFOS_TABLE_STUDIES_COLUMN'); ?>">
-                        <div class="row-content">
-                            <?php if (isset($item->StudyProgramsTotals) && is_array($item->StudyProgramsTotals) && count($item->StudyProgramsTotals) > 0) : ?>
-                                <?php echo LayoutHelper::render('default_studies', array('view' => [$item->StudyProgramsTotals,$item->StudyProgramsTotalsWithReports,$item->id]), dirname(__FILE__)); ?>
-                            <?php endif; ?>
+                        <div class="row-content unit-title">
+                            <?php echo $item->{'unit_short_code_'.$langSEF}." :: ".$item->{'unit_title_'.$langSEF}; ?>
                         </div>
                     </td>
                     <td scope="row" data-label="<?php echo Text::_('COM_ETHAAE_REPORTS_REPORTS_FK_REPORTTYPE_ID'); ?>">

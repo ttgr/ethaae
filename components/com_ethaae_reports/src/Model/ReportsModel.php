@@ -284,15 +284,7 @@ class ReportsModel extends ListModel
 		
 		foreach ($items as $item)
 		{
-
-            $item->files =  Ethaae_reportsHelper::getFiles($item->id);
-
-				if (!empty($item->academic_greek))
-					{
-						$item->academic_greek = Text::_('COM_ETHAAE_REPORTS_REPORTS_ACADEMIC_GREEK_OPTION_' . preg_replace('/[^A-Za-z0-9\_-]/', '',strtoupper(str_replace(' ', '_',$item->academic_greek))));
-					}
-
-
+            $item->files =  Ethaae_reportsHelper::getFiles($item);
 		}
 		return $items;
 	}

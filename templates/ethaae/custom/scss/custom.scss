@@ -1521,6 +1521,18 @@ ul.sigFreeClassic {
 //  left:45px!important;
 }
 
+[role="tooltip"]:not(.show) {
+  right:unset;
+  box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.14) inset;
+  -webkit-transition: background 0.2s;
+  -moz-transition: background 0.2s;
+  border:0;
+  border-radius: 0.1875rem;
+  color: #ffffff;
+  background-color:#02899b;
+
+}
+
 .djacc-popup {
   .djacc__openbtn {
     background: #ffffff !important;

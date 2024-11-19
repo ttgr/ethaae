@@ -18,20 +18,30 @@ use \Joomla\CMS\Language\Text;
 $session = Factory::getApplication()->getSession();
 $sid = md5($session->getId());
 
+$data = $displayData;
+$reports = array();
+
+if (isset($data['view']))
+{
+    $reports = $data['view'];
+}
+
+
 ?>
 
 <ul>
     <?php
     $i = 0;
-    foreach ($item->files as $f): ?>
+    foreach ($reports[0]->files as $f): ?>
         <?php $flink = Uri::root()."index.php?option=com_ethaae_reports&task=report.download&id=".md5($f->id)."&sid=".$sid; ?>
         <?php $f_title = (!empty($f->caption)) ? $f->caption : $f->name; ?>
         <li class="files"  >
             <?php
             ?>
-                    <a class="hasTooltip html5lightbox" data-bs-placement="top" href="<?php echo $flink; ?>" data-bs-original-title="<?php echo $f->ftype; ?>">
-                        <?php echo $f->langImage; ?>
-                    </a>
+            <a class="hasTooltip html5lightbox" data-bs-placement="top" href="<?php echo $flink; ?>" data-bs-original-title="<?php echo $f->ftype; ?>">
+                <?php echo $f->langImage; ?>
+            </a>
+            <div id="download-file-<?php echo $f->id;?>" role="tooltip"><?php echo $f->tooltip; ?></div>
         </li>
         <?php
         $i++;

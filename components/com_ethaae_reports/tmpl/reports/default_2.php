@@ -127,15 +127,9 @@ $langSEF = Ethaae_reportsHelper::getCurrentLangSef();
                     </td>
                     <td scope="row" data-label="<?php echo Text::_('COM_ETHAAE_REPORTS_REPORTS_FK_REPORTTYPE_ID'); ?>">
                         <div class="row-content">
-                            <?php
-                            if(isset($item->files)) {
-                                //dump($item->files);
-                                include 'files.php';
-                            } else {
-                                echo "&nbsp;";
-                            }
-                            ?>
-
+                            <?php if (isset($item->files) && is_array($item->files) && count($item->files) > 0) : ?>
+                                <?php echo LayoutHelper::render('default_files', array('view' => $item->files), dirname(__FILE__)); ?>
+                            <?php endif; ?>
                         </div>
                     </td>
                 </tr>
