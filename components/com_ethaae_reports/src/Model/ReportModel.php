@@ -11,6 +11,7 @@ namespace Ethaaereports\Component\Ethaae_reports\Site\Model;
 // No direct access.
 defined('_JEXEC') or die;
 
+use Joomla\CMS\Component\ComponentHelper;
 use \Joomla\CMS\Factory;
 use \Joomla\Utilities\ArrayHelper;
 use \Joomla\CMS\Language\Text;
@@ -383,6 +384,37 @@ class ReportModel extends ItemModel
 		
 	}
 
+
+    public function logFileDownload($file,$session,string $path)
+    {
+        // Ensure necessary objects exist
+        if (!isset($file->id) || !isset($session->userid)) {
+            return ;
+        }
+
+        // Get the database object
+        $db = Factory::getContainer()->get('DatabaseDriver');
+
+        // Step 1: Update the download counter for the file
+        $query = $db->getQuery(true)
+            ->update($db->quoteName('#__ethaae_reports_files'))
+            ->set($db->quoteName('hits') . ' = ' . $db->quoteName('hits') . ' + 1')
+            ->where($db->quoteName('id') . ' = ' . $db->quote($file->id));
+
+        $db->setQuery($query);
+        $db->execute();
+        // Step 2: Log user download details
+        $user = Factory::getContainer()->get(UserFactoryInterface::class)->loadUserById($session->userid);
+        $logObject = new \stdClass();
+        $logObject->userid = $user->id;
+        $logObject->file_id = $file->id;
+        $logObject->date = date("Y-m-d H:i:s");
+        $logObject->ip = IpHelper::getIp();
+        $logObject->path = $path;
+        $db->insertObject('#__ethaae_reports_files_user_download', $logObject);
+    }
+
+
     /**
      * @param   int $sid Element id
      *
@@ -400,25 +432,23 @@ class ReportModel extends ItemModel
         if ($session && is_object($file) && (int) $file->id > 0 ) {
 
             set_time_limit(0);
-            //Add a HIT
-              $query = "UPDATE #__ethaae_reports_files SET hits = hits + 1"
-                  . " WHERE id = ".$db->quote($file->id);
-              $db->setQuery($query);
-              $db->execute();
-
-            $user = Factory::getUser($session->userid);
-            $object = new \stdClass();
-            $object->userid = $user->id;
-            $object->file_id = $file->id;
-            $object->date = date("Y-m-d H:i:s");
-            $object->ip = IpHelper::getIp();
-
-            $db->insertObject("#__ethaae_reports_files_user_download",$object);
-
             //Tasos Normally this is the one should be correct
             //$this->output_file( JPATH_SITE.$file->path, $file->caption, $file->type);
+            $params = ComponentHelper::getParams('com_ethaae_reports');
+            $upload_path = $params->get('upload_dir','').'/';
 
-            $this->output_file_in_browser(JPATH_SITE.$file->path, $file->caption, $file->type);
+            if (isset($file->path) && str_starts_with($file->path, '/files/reports/')) {
+                $file->path = str_replace('/files/reports/', '', $file->path);
+            }
+
+            if(!$file || !is_file($upload_path.$file->path)) {
+                $this->output_file_in_browser(JPATH_SITE.'/images/file_not_found.pdf','Το Αρχείο δεν Βρέθηκε / File Not Found','application/pdf');
+            } else {
+                $this->logFileDownload($file,$session,$upload_path.$file->path);
+                $this->output_file_in_browser($upload_path.$file->path, $file->caption, $file->type);
+            }
+
+
 
 
             //Tasos This is to allow Html5Lightbox to allow popup viewing of PDFs

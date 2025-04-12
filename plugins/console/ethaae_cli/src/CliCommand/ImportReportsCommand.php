@@ -140,7 +140,7 @@ class ImportReportsCommand extends AbstractCommand
     protected function importFiles(SymfonyStyle $symfonyStyle,$db,$report) {
 
         $query = "INSERT INTO #__ethaae_reports_files (fk_report_id,rid,type,name,path,size,ordering,caption,fk_file_id,language,hits)
-                SELECT item_id as fk_report_id,rid,type,name,path,size,ordering,IF(caption='',name,caption) as capt,IF(image = '' OR image = 'null',1,image) as fk_file_id,IF(language = '*','el-GR',language) as lang,hits FROM `#__adip_attachments_files` where item_id = ".$db->quote($report->id);
+                SELECT item_id as fk_report_id,rid,type,name,REPLACE(path,'/files/reports/',''),size,ordering,IF(caption='',name,caption) as capt,IF(image = '' OR image = 'null',1,image) as fk_file_id,IF(language = '*','el-GR',language) as lang,hits FROM `#__adip_attachments_files` where item_id = ".$db->quote($report->id);
         $db->setQuery($query);
         try {
             $db->execute();

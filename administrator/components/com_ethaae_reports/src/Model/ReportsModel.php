@@ -270,6 +270,7 @@ class ReportsModel extends ListModel
 			$query->order($db->escape($orderCol . ' ' . $orderDirn));
 		}
 
+        //Factory::getApplication()->enqueueMessage($db->replacePrefix((string) $query), 'notice');
 		return $query;
 	}
 

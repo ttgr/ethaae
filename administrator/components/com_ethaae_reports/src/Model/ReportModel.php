@@ -465,9 +465,9 @@ class ReportModel extends AdminModel
 
         $prefix = $data['report'].'_';
         $file = $data['file'];
-        $row = new \stdClass();
+            $row = new \stdClass();
 
-        $row->path = $params->get('upload_dir','/images/reports/').'/';
+        $path = $params->get('upload_dir','').'/';
 
         $row->fk_report_id = $data['report'];
         $row->rid = md5(time().rand());
@@ -475,7 +475,7 @@ class ReportModel extends AdminModel
         $row->name = $file['name'];
         $ext = pathinfo($file['name'], PATHINFO_EXTENSION);
         $filename = $prefix.md5($file['name'].rand()).'.'.$ext;
-        $row->path = $row->path.$filename;
+        $row->path = $filename;
         $row->size = $file['size'];
         $row->caption = $file['name'];
         $row->state = 1;
@@ -488,9 +488,9 @@ class ReportModel extends AdminModel
         $row->hits = 0;
 //        file_put_contents(JPATH_SITE.'/tmp/files.txt', print_r($row, true).PHP_EOL , FILE_APPEND | LOCK_EX);
         try {
-            File::copy($file['tmp_name'],JPATH_SITE.$row->path);
+            File::copy($file['tmp_name'],$path.$filename);
         } catch (\Exception $e) {
-            return array('message'=>'Unable to move tmp file '.  $e->getMessage().' '.JPATH_SITE.$row->path);
+            return array('message'=>'Unable to move tmp file '.  $e->getMessage().' '.$path.$filename);
         }
         try {
             Factory::getContainer()->get('DatabaseDriver')->insertObject('#__ethaae_reports_files', $row, 'id');
