@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<metadata>
+	<layout title="COM_ADIP_MEMBERS_TITLE_LIST_VIEW_MEMBERSBOARDS" option="View">
+        <message>
+                        <![CDATA[COM_ADIP_MEMBERS_TITLE_LIST_VIEW_MEMBERSBOARDS_DESC]]>
+        </message>
+	</layout>
+    <fields name="request">
+        <fieldset name="request">
+            <field
+                    name="boardtype"
+                    query="SELECT id, name FROM #__adip_members_boardtypes ORDER BY name ASC"
+                    type="sql"
+                    key_field="id"
+                    value_field="name"
+                    label="Είδος Αναφοράς"
+                    required="true"
+                    description=""
+                    default=""
+            >
+                <option value=""> - Επιλέξτε Είδος Αναφοράς -</option>
+            </field>
+        </fieldset>
+    </fields>
+</metadata>

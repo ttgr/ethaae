@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+    <fields name="filter">
+        <field name="search" type="text" description="COM_ADIP_MEMBERS_SEARCH_FILTER_SUBMIT"
+               label="COM_USERS_FILTER_SEARCH_DESC"
+               class="js-stools-search-string" />
+
+        <field name="state"
+               type="status"
+               label="COM_ADIP_MEMBERS_FILTER_STATE"
+               description="COM_ADIP_MEMBERS_FILTER_STATE_DESC"
+               onchange="this.form.submit();"
+        >
+            <option value="">JOPTION_SELECT_PUBLISHED</option>
+        </field>
+
+        <field name="type_id" type="sql" label="COM_ADIP_MEMBERS_FORM_LBL_MEMBERSBOARD_TYPE_ID" query="SELECT `id` AS `id`, `title` AS val FROM `#__adip_members_types`" header="COM_ADIP_MEMBERS_MEMBERSBOARDS_TYPE_ID_FILTER" key_field="id" value_field="val" class="inputbox" onchange="this.form.submit()" translate="true"/>
+        <field name="board_type_id"
+               type="sql"
+               label="COM_ADIP_MEMBERS_TITLE_BOARDTYPE"
+               query="SELECT '' AS `id`, 'COM_ADIP_MEMBERS_TAB_BOARDTYPE_FILTER' AS `val` UNION SELECT `id` AS `id`, `name` AS val FROM `#__adip_members_boardtypes`"
+               key_field="id"
+               value_field="val"
+               class="inputbox"
+               onchange="this.form.submit()"
+               translate="true"
+        />
+
+<field name="active" label="COM_ADIP_MEMBERS_FORM_LBL_MEMBERSBOARD_ACTIVE" type="list" onchange="this.form.submit();" default="COM_ADIP_MEMBERS_MEMBERSBOARDS_ACTIVE_FILTER">
+  <option value="">COM_ADIP_MEMBERS_MEMBERSBOARDS_ACTIVE_FILTER</option>
+  <option value="0">COM_ADIP_MEMBERS_MEMBERSBOARDS_ACTIVE_OPTION_0</option>
+  <option value="1">COM_ADIP_MEMBERS_MEMBERSBOARDS_ACTIVE_OPTION_1</option>
+</field>
+
+
+    </fields>
+
+    <fields name="list">
+
+        <field name="fullordering"
+               type="list"
+               label="COM_ADIP_MEMBERS_LIST_FULL_ORDERING"
+               description="COM_ADIP_MEMBERS_LIST_FULL_ORDERING_DESC"
+               onchange="this.form.submit();"
+               default="a.id DESC"
+        >
+            <option value="">JGLOBAL_SORT_BY</option>
+            <option value="a.id ASC">COM_ADIP_MEMBERS_ID_ASC</option>
+            <option value="a.id DESC">COM_ADIP_MEMBERS_ID_DESC</option>
+            <option value="a.state ASC">COM_ADIP_MEMBERS_STATE_ASC</option>
+            <option value="a.state DESC">COM_ADIP_MEMBERS_STATE_DESC</option>
+            <option value="a.lastname ASC">COM_ADIP_MEMBERS_LASTNAME_ASC</option>
+            <option value="a.lastname DESC">COM_ADIP_MEMBERS_LASTNAME_DESC</option>
+
+
+        </field>
+
+       <field name="limit"
+               type="limitbox"
+               label="COM_ADIP_MEMBERS_LIST_LIMIT"
+               description="COM_ADIP_MEMBERS_LIST_LIMIT_DESC"
+               class="input-mini"
+               default="25"
+               onchange="this.form.submit();"
+        />
+
+    </fields>
+
+</form>

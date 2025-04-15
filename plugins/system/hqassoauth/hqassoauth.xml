@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension version="3.0" type="plugin" group="system" method="upgrade">
+	<name>HQA SSO</name>
+	<author>Tasos Triantis</author>
+	<license>GNU/GPLv3</license>
+	<authorEmail>tasos.tr@gmail.com</authorEmail>
+	<authorUrl></authorUrl>
+	<creationDate>Sept 2019</creationDate>
+	<copyright>Copyright 2019 Tasos Triantis. All Rights Reserved.</copyright>
+	<license></license>
+	<version>1.0.0</version>
+	<description>PLG_SYSTEM_BIESSOAUTH_XML_DESCRIPTION</description>
+	<files>
+		<filename plugin="hqassoauth">hqassoauth.php</filename>
+	</files>
+	<config>
+		<fields name="params">
+			<fieldset name="basic">
+				<field
+					name="app_name"
+					type="text"
+					label="PLG_SYSTEM_BIESSOAUTH_APP_NAME"
+					description="PLG_SYSTEM_BIESSOAUTH_APP_NAME"
+					default=""
+					required="true"
+					filter="string"
+					size="100"
+				/>
+                                                        
+				<field
+					name="client_id"
+					type="text"
+					label="PLG_SYSTEM_BIESSOAUTH_CLIENT_ID"
+					description="PLG_SYSTEM_BIESSOAUTH_CLIENT_ID"
+					default=""
+					required="true"
+					filter="string"
+					size="100"
+				/>
+
+                                
+				<field
+					name="client_secret"
+					type="text"
+					label="PLG_SYSTEM_BIESSOAUTH_CLIENT_SECRET"
+					description="PLG_SYSTEM_BIESSOAUTH_CLIENT_SECRET"
+					default=""
+					required="true"
+					filter="string"
+					size="100"
+				/>
+				<field
+					name="scope"
+					type="text"
+					label="PLG_SYSTEM_BIESSOAUTH_SCOPE"
+					description="PLG_SYSTEM_BIESSOAUTH_SCOPE"
+					default=""
+					required="true"
+					filter="string"
+					size="100"
+				/>
+                                <field
+                                        name="authorize_endpoint" 
+                                        type="url" 
+                                        default="" 
+                                        label="PLG_SYSTEM_BIESSOAUTH_AUTHORIZE_ENDPOINT" 
+                                        description="PLG_SYSTEM_BIESSOAUTH_AUTHORIZE_ENDPOINT" 
+                                        size="100" 
+                                        required="true"
+                                />                                                            
+                                <field 
+                                        name="access_token_endpoint" 
+                                        type="url" 
+                                        default="" 
+                                        label="PLG_SYSTEM_BIESSOAUTH_ACCESS_TOKEN" 
+                                        description="PLG_SYSTEM_BIESSOAUTH_ACCESS_TOKEN" 
+                                        size="100" 
+                                        required="true"
+                                />                                                            
+                                <field
+                                        name="endsession_endpoint"
+                                        type="url"
+                                        default=""
+                                        label="PLG_SYSTEM_BIESSOAUTH_ENDSESSION_TOKEN"
+                                        description="PLG_SYSTEM_BIESSOAUTH_ENDSESSION_TOKEN"
+                                        size="100"
+                                        required="true"
+                                />
+
+			</fieldset>
+		</fields>
+        </config>                
+	<languages folder="language">
+		<language tag="en-GB">en-GB/en-GB.plg_system_biessoauth.ini</language>
+		<language tag="en-GB">en-GB/en-GB.plg_system_biessoauth.sys.ini</language>
+	</languages>
+</extension>

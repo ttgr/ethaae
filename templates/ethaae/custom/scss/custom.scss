@@ -1554,3 +1554,43 @@ ul.sigFreeClassic {
 
   }
 }
+
+.modal-wrapper {
+  display: none;
+}
+
+.borad-member-cv {
+  padding: 2rem;
+  .title h1{
+    padding: 0;
+    margin: 0;
+    font-size: 1.4rem;
+    text-align: left;
+    color: #000000;
+    font-weight: bold;
+  }
+
+  .subtitle {
+    h2 {
+      text-align: left;
+      font-size: 0.9rem;
+      padding: 0;
+      margin: 0;
+    }
+  }
+
+  .content {
+    margin-top: 2rem;
+    text-align: left;
+    img {
+      width: 200px;
+      height: auto;
+      border: 1px solid #ddd;
+      float: left;
+      margin-right: 1rem;
+      margin-bottom: 1rem;
+    }
+
+
+  }
+}
