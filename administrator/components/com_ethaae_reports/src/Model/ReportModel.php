@@ -27,6 +27,7 @@ use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Uri\Uri;
 use \Joomla\Filesystem\File;
 use Joomla\Utilities\ArrayHelper;
+use Joomla\CMS\Log\Log;
 
 /**
  * Report model.
@@ -410,6 +411,7 @@ class ReportModel extends AdminModel
 
     public function save($data)
     {
+        Log::addLogger(array('text_file' => 'com_ethaae_reports.log.php'), Log::ALL, array('com_ethaae_reports'));
 //        $s_date = $data['session_date'];
 //        $v_from = $data['valid_from'];
 //        $v_to = $data['valid_to'];
@@ -428,9 +430,6 @@ class ReportModel extends AdminModel
         $data['title'] = Ethaae_reportsHelper::getUnitInfo($data['fk_unit_id'])->title;
         $data['fk_parent_id'] = Ethaae_reportsHelper::getUnitInfo($data['fk_unit_id'])->parentunitid;
 
-
-
-
         try {
             $result = parent::save($data);
             if ($result) {
@@ -439,6 +438,7 @@ class ReportModel extends AdminModel
                 return true;
             }
         } catch (\Exception $e) {
+            Log::add('Error Saving report'.$e->getCode().' Msg:'.$e->getMessage() , Log::ERROR, 'com_ethaae_reports');
             Factory::getApplication()->enqueueMessage(
                 Text::sprintf('JLIB_DATABASE_ERROR_FUNCTION_FAILED', $e->getCode(), $e->getMessage()),
                 'warning'

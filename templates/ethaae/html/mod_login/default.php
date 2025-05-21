@@ -14,6 +14,7 @@ use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Plugin\PluginHelper;
 use Joomla\CMS\Router\Route;
+use \Joomla\CMS\Uri\Uri;
 
 $app->getDocument()->getWebAssetManager()
     ->useScript('core')
@@ -33,7 +34,7 @@ $app->getDocument()->getWebAssetManager()
 
 <div class="userlogin">
     <div class="controls">
-        <a href="<?php echo JURI::root().'?hqarequest=ssologin';?> " class="btn btn-primary login-button">
+        <a href="<?php echo URI::root().'?hqarequest=ssologin';?> " class="btn btn-primary login-button">
             <span class="icon-lock icon-white"></span> <?php echo JText::_('TPL_ADMIN_MOD_LOGIN_SSO_BTN'); ?>
         </a>
     </div>

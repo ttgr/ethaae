@@ -220,7 +220,7 @@ class InstitutesinfosModel extends ListModel
             if($preLetter !== $curLetter) {
                 $preLetter = $curLetter;
             }
-            $row->logo = $this->getImage($row->unitcode,'/images/institutes/logos/',$extensions);
+            $row->logo = $this->getImage(strtolower($row->unitcode),'/images/institutes/logos/',$extensions);
             $items[$preLetter][] = $row;
         }
 
@@ -229,11 +229,15 @@ class InstitutesinfosModel extends ListModel
 
     private function getImage(string $img,string $path,array $extensions)
     {
+//        $paths = [];
         foreach ($extensions as $ext) {
+//            $paths[] = JPATH_SITE.$path.$img.'.'.$ext;
             if (is_file(JPATH_SITE.$path.$img.'.'.$ext)) {
                 return $path.$img.'.'.$ext;
             }
+//            file_put_contents(JPATH_SITE.'/tmp/paths.txt', print_r($paths, true).PHP_EOL , FILE_APPEND | LOCK_EX);
         }
+
          return false;
     }
 

@@ -57,7 +57,7 @@ if (!empty($saveOrder))
 			<?php echo LayoutHelper::render('joomla.searchtools.default', array('view' => $this)); ?>
 
 				<div class="clearfix"></div>
-				<table class="table table-striped" id="reportList">
+				<table class="reportList table table-striped" id="reportList">
 					<thead>
 					<tr>
 						<th class="w-1 text-center">

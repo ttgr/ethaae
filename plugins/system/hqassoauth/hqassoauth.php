@@ -53,7 +53,8 @@ class plgSystemHqassoauth extends CMSPlugin
         if (isset($get['hqarequest']) and $get['hqarequest'] == 'ssologout') {
             $authorizationUrl = $params['endsession_endpoint'] . "?client_id=" . $params['client_id'] . "&post_logout_redirect_uri=" . $return_url;
             $this->logoutCurrentUser();
-            header('Location: ' . $authorizationUrl);
+            //header('Location: ' . $authorizationUrl);
+            $app->redirect($authorizationUrl);
         }
 
 
@@ -91,7 +92,7 @@ class plgSystemHqassoauth extends CMSPlugin
                     }
 
                     $accessToken = $this->getAccessToken($params['access_token_endpoint'], 'authorization_code', $params['client_id'], $params['client_secret'], $get['code'], $return_url);
-                    file_put_contents(JPATH_SITE.'/tmp/token.txt', print_r($accessToken, true));
+//                    file_put_contents(JPATH_SITE.'/tmp/token.txt', print_r($accessToken, true));
                     if ($accessToken == false) {
                         //JFactory::getApplication()->enqueueMessage(JText::_('The user does not exist in the current App'), 'error');
                         Log::add('Unable retrieve AccessToken::' . json_encode($accessToken), Log::ERROR, 'com_ethaae_hqalogin');
@@ -138,6 +139,13 @@ class plgSystemHqassoauth extends CMSPlugin
 
     function getAccessToken($tokenendpoint, $grant_type, $clientid, $clientsecret, $code, $redirect_url)
     {
+        Log::addLogger(array('text_file' => 'com_ethaae_hqalogin.log.php'), Log::ALL, array('com_ethaae_hqalogin'));
+        try {
+            $app = Factory::getApplication();
+        } catch (\Exception $e) {
+            Log::add('Unable to Initialise Joomla App:: '.$e->getMessage(), Log::ERROR, 'com_ethaae_hqalogin');
+            return [];
+        }
 
         $ch = curl_init($tokenendpoint);
         curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
@@ -161,29 +169,27 @@ class plgSystemHqassoauth extends CMSPlugin
 
 
         $content = json_decode($content, true);
+        //file_put_contents(JPATH_SITE.'/tmp/token.txt', print_r($s, true).PHP_EOL , FILE_APPEND | LOCK_EX);
         if (!isset($content["access_token"])) {
+            Log::add('Generic Error form OAuth Provider: No Token' , Log::ERROR, 'com_ethaae_hqalogin');
             return false;
         }
         $s[0] = explode('.', $content["access_token"])[1];
         $s[1] = json_decode(base64_decode(str_replace(array('-', '_'), array('+', '/'), $s[0])), true);
-        //file_put_contents('/var/www/html/log.txt', print_r($s, true));
-
-
-        //$content["access_token"] = json_decode(base64_decode(explode('.', $content["access_token"])[1]),true);
         $content["access_token"] = $s[1];
 
         if (isset($content["error_description"])) {
-            JFactory::getApplication()->enqueueMessage($content["error_description"], 'error');
+            Log::add('Generic Error form OAuth Provider: '.$content["error_description"] , Log::ERROR, 'com_ethaae_hqalogin');
+            return false;
         } else if (isset($content["error"])) {
-            JFactory::getApplication()->enqueueMessage($content["error"], 'error');
+            Log::add('Generic Error form OAuth Provider: '.$content["error"] , Log::ERROR, 'com_ethaae_hqalogin');
+            return false;
         } else if (isset($content["access_token"])) {
-            $access_token = $content["access_token"];
+            return $content["access_token"];
         } else {
-            JFactory::getApplication()->enqueueMessage(JText::_('Invalid response received from OAuth Provider. Contact your administrator for more details.'), 'error');
+            Log::add('Invalid response received from OAuth Provider ' , Log::ERROR, 'com_ethaae_hqalogin');
             return false;
         }
-
-        return $access_token;
     }
 
 
@@ -243,7 +249,7 @@ class plgSystemHqassoauth extends CMSPlugin
         $user->setLastVisit();
 
         if ($ui == 'administrator') {
-            $app->redirect(JURI::root() . 'administrator/index.php?');
+            $app->redirect(URI::root() . 'administrator/index.php?');
         } else {
             //No need to make redirection
             //$app->redirect(JURI::root().'index.php?');
@@ -252,19 +258,21 @@ class plgSystemHqassoauth extends CMSPlugin
 
     function logoutCurrentUser(): void
     {
-        $uri = JUri::getInstance();
-        $url = $uri->toString();
-
+        $url = Uri::getInstance()->toString();
         $ui = (strpos($url, 'administrator') !== false) ? 'administrator' : 'site';
 
-
         if ($ui == 'administrator') {
-            $app = JFactory::getApplication('administrator');
+            $app = Factory::getApplication('administrator');
         } else {
-            $app = JFactory::getApplication('site');
+            $app = Factory::getApplication('site');
         }
-        $user = JFactory::getUser();
+        $user = $app->getIdentity();
         $app->logout($user->id);
+
+//        if ($ui == 'administrator') {
+//            $app->redirect(URI::root() . 'administrator/index.php?');
+//        }
+
     }
 
     function updateCurrentUserName($id, $name): void
@@ -352,12 +360,13 @@ class plgSystemHqassoauth extends CMSPlugin
 
             return false;
         }
-        file_put_contents(JPATH_SITE.'/tmp/joomlaUser.txt', print_r($joomlaUser, true).PHP_EOL , FILE_APPEND | LOCK_EX);
+        //file_put_contents(JPATH_SITE.'/tmp/joomlaUser.txt', print_r($joomlaUser, true).PHP_EOL , FILE_APPEND | LOCK_EX);
 
         //Send notification Mail
         $subject = $fromFaculty ? 'ΕΘΑΑΕ :: Νέος Forum User' : 'ΕΘΑΑΕ :: Νέος Χρήστης - προς ενεργοποίηση';
         $body = "Ο Χρήστης: " . $name . " με mail: " . $mail . " εγγράφηκε στο Site";
-        self::sendMail(['tasos.tr@outlook.com'], $subject, $body);
+
+        self::sendMail(['forum@ethaae.gr'], $subject, $body,['tasos.tr@outlook.com']);
         return $joomlaUser;
 
 

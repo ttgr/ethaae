@@ -374,7 +374,7 @@ class Ethaae_reportsHelper
                 'JPEG',
                 'PNG',
             ];
-            $item->logo = self::getImage($item->unitcode,'/images/institutes/logos/',$extensions);
+            $item->logo = self::getImage(strtolower($item->unitcode),'/images/institutes/logos/',$extensions);
             return $item;
         }
         return ;
