@@ -34,6 +34,16 @@
 						filter="string"
 						class="input-xxlarge"
 				/>
+				<field
+						name="api_qdata_base_url"
+						type="text"
+						label="QData API Baase Url"
+						description=""
+						default=""
+						required="true"
+						filter="string"
+						class="input-xxlarge"
+				/>
 			</fieldset>
 		</fields>
 	</config>

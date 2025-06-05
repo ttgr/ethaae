@@ -1,27 +1,26 @@
 <?php
 
 /**
- * @version    CVS: 1.1.0
- * @package    Com_Ethaae_reports
+ * @version    CVS: 1.0.2
+ * @package    Com_Ethaae_qdata
  * @author     Tasos Triantis <tasos.tr@gmail.com>
- * @copyright  2024 Tasos Triantis
+ * @copyright  2025 Tasos Triantis
  * @license    GNU General Public License version 2 or later; see LICENSE.txt
  */
 
-namespace Ethaaereports\Component\Ethaae_reports\Site\View\Reports;
+namespace Ethaaeqdata\Component\Ethaae_qdata\Site\View\Qdatas;
 // No direct access
 defined('_JEXEC') or die;
 
+use \Joomla\Utilities\ArrayHelper;
 use \Joomla\CMS\MVC\View\HtmlView as BaseHtmlView;
 use \Joomla\CMS\Factory;
 use \Joomla\CMS\Language\Text;
-use Joomla\Registry\Registry;
-use Joomla\CMS\Form\Form;
 
 /**
- * View class for a list of Ethaae_reports.
+ * View class for a list of Ethaae_qdata.
  *
- * @since  1.1.0
+ * @since  1.0.2
  */
 class HtmlView extends BaseHtmlView
 {
@@ -46,33 +45,31 @@ class HtmlView extends BaseHtmlView
 	{
 		$app = Factory::getApplication();
 
-		$this->params = $app->getParams('com_ethaae_reports');
-//		$this->filterForm = $this->get('FilterForm');
-//        dump($this->filterForm);
-//		$this->activeFilters = $this->get('ActiveFilters');
+		$this->state = $this->get('State');
+		$this->params = $app->getParams('com_ethaae_qdata');
+		$this->filterForm = $this->get('FilterForm');
+		$this->activeFilters = $this->get('ActiveFilters');
+        $filterData = Factory::getApplication()->getUserState('com_ethaae_qdata.qdatas.filter', array());
 
-        if ($menu = $app->getMenu()->getActive()) {
-            $menu_params = $menu->getParams();
-        } else {
-            $menu_params = new Registry;
+        $unitID = ArrayHelper::getValue($filterData, 'instituteid', 0,'INT');
+
+        $collectionyear  = ArrayHelper::getValue($filterData, 'collectionyear', 0,'INT');
+        if ($collectionyear == 0) {
+            $this->defaultCollectionyear = date('Y');
         }
 
-
-        $this->model = $this->getModel();
-        $this->report_id = $app->getInput()->getInt('reporttype',0);
-        $this->model->reportTypeID = $this->report_id;
-        $this->state = $this->get('State');
-        $option = $app->getInput()->getString('option','');
-        if (is_numeric($this->report_id) && $this->report_id > 0) {
-            $tpl = $this->report_id;
-            $this->filterForm = Form::getInstance("com_ethaae_reports.reports.filter", JPATH_SITE . '/components/' . $option . "/forms/filter_reports_".$this->report_id.".xml", array("control" => ""));
-            $this->filterForm->setFieldAttribute('filter_fk_reporttype_id', 'default',$this->report_id);
-            $this->state->set('filter.fk_reporttype_id',$this->report_id);
-        }
         $this->items = $this->get('Items');
         $this->pagination = $this->get('Pagination');
 
-        // Check for errors.
+
+        if ($unitID > 0 && $collectionyear > 0)
+        {
+            $model = $this->getModel();
+            $this->topItem = $model->getUnitData($unitID,$collectionyear);
+        }
+
+
+		// Check for errors.
 		if (count($errors = $this->get('Errors')))
 		{
 			throw new \Exception(implode("\n", $errors));
@@ -105,7 +102,7 @@ class HtmlView extends BaseHtmlView
 		}
 		else
 		{
-			$this->params->def('page_heading', Text::_('COM_ETHAAE_REPORTS_DEFAULT_PAGE_TITLE'));
+			$this->params->def('page_heading', Text::_('COM_ETHAAE_QDATA_DEFAULT_PAGE_TITLE'));
 		}
 
 		$title = $this->params->get('page_title', '');
@@ -154,5 +151,4 @@ class HtmlView extends BaseHtmlView
 	{
 		return isset($this->state->{$state}) ? $this->state->{$state} : false;
 	}
-
 }

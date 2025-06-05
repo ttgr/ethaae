@@ -1,0 +1,40 @@
+{
+  "$schema": "https://developer.joomla.org/schemas/json-schema/web_assets.json",
+  "name": "com_ethaae_qdata",
+  "version": "CVS: 1.0.2",
+  "license": "GNU General Public License version 2 or later; see LICENSE.txt",
+  "assets": [
+    {
+      "name": "com_ethaae_qdata.admin",
+      "type": "style",
+      "uri": "com_ethaae_qdata/admin.css"
+    },
+    {
+      "name": "com_ethaae_qdata.admin",
+      "type": "script",
+      "uri": "com_ethaae_qdata/admin.js",
+      "dependencies": [
+        "jquery"
+      ],
+      "attributes": {
+        "defer": true
+      }
+    },
+    {
+      "name": "com_ethaae_qdata.list",
+      "type": "script",
+      "uri": "com_ethaae_qdata/list.js",
+      "dependencies": [
+        "jquery"
+      ],
+      "attributes": {
+        "defer": true
+      }
+    },
+    {
+        "name": "com_ethaae_qdata.list",
+        "type": "style",
+        "uri": "com_ethaae_qdata/list.css"
+    }
+  ]
+}

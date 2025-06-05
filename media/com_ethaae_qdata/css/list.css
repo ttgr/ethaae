@@ -1,0 +1,164 @@
+/**
+ * @version     CVS: 1.0.2
+ * @package     com_ethaae_qdata
+ * @copyright   2025 Tasos Triantis
+ * @license     GNU General Public License version 2 or later; see LICENSE.txt
+ * @author      Tasos Triantis <tasos.tr@gmail.com>
+ */
+.filter-group {
+    display: -webkit-flex;
+    display: flex;
+    -webkit-flex-direction: row;
+    flex-direction: row;
+    -webkit-flex-wrap: wrap;
+    flex-wrap: wrap;
+    -webkit-justify-content: flex-start;
+    justify-content: flex-start;
+    -webkit-align-content: stretch;
+    align-content: stretch;
+    -webkit-align-items: flex-start;
+    align-items: flex-start;
+    gap:2rem;
+}
+
+.filter-item {
+    -webkit-order: 0;
+    order: 0;
+    -webkit-flex: 0 1 auto;
+    flex: 0 1 auto;
+    -webkit-align-self: auto;
+    align-self: auto;
+}
+
+.container-filters {
+    display: -webkit-flex;
+    display: flex;
+    -webkit-flex-direction: row;
+    flex-direction: row;
+    -webkit-flex-wrap: wrap;
+    flex-wrap: wrap;
+    -webkit-justify-content: space-between;
+    justify-content: space-between;
+}
+
+.filters-item {
+    -webkit-order: 0;
+    order: 0;
+    -webkit-flex: 0 1 auto;
+    flex: 0 1 auto;
+    -webkit-align-self: auto;
+    align-self: auto;
+}
+
+.filter-item .chosen-single {
+    background: none;
+    height: 30px;
+    line-height: 30px;
+    color: #808080;
+    border: 1px solid #808080;
+}
+
+.filter-item .form-control {
+    border: 1px solid #808080;
+    border-radius: 4px;
+    padding: 5px 5px;
+    margin: 0;
+}
+
+p.values-listing {
+    margin:0 0 3px 0;
+}
+
+th.values-listing,
+td.values-listing {
+    width:40%;
+}
+
+th.school-year,
+td.school-year {
+    width:10%;
+}
+
+
+.page-top-item {
+    margin: 4rem 0 4rem 0
+}
+
+.stats-item {
+    border: 1px solid #e0e0e0; /* Light border for definition */
+    border-radius: 8px; /* Rounded corners */
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); /* Soft shadow */
+    padding: 1rem; /* Padding for inner space */
+    margin-bottom: 1rem; /* Space between items */
+    border-left: 0.5rem solid #f49e2e;
+    transition: transform 0.3s, box-shadow 0.3s; /* Smooth hover effect */
+}
+
+.stats-item:hover {
+    transform: translateY(-5px); /* Lift slightly on hover */
+    box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.15); /* Enhance shadow on hover */
+}
+
+.stats-item-year {
+    font-weight: bold;
+    color: black;
+    margin-bottom: 0.8rem;
+}
+
+.stats-item-title {
+    margin-bottom:1rem;
+}
+
+.stats-item-date {
+    font-size: 0.9rem;
+    color: #78c4ce;
+}
+
+.stats-item-variable {
+    margin: 0 0 1rem 0;
+}
+
+.stats-item-variable-title {
+    font-size: 0.9rem;
+    font-weight: bold;
+    text-align: center;
+}
+
+.stats-item-variable-value {
+    font-size: 1.5rem;
+    font-weight: bold;
+    text-align: center;
+    color: #78c4ce;
+}
+
+.space-bottom-2x {
+    margin-bottom: 1rem;
+    display: block;
+}
+
+.rowstats {
+    margin-top: 2rem;
+}
+.header-stats-variables .stats-item-variable {
+    border: 1px solid #e0e0e0; /* Light border for definition */
+    border-radius: 8px; /* Rounded corners */
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); /* Soft shadow */
+    padding: 0.8rem;
+}
+
+.header-stats-variables .stats-item-variable .stats-item-variable-title {
+    min-height: 3rem;
+}
+.header-stats-variables .stats-item-variable-wrapper {
+    padding: 1rem;
+}
+.top-item.page-header h1 {
+    margin-bottom: 0.5rem !important;
+}
+.top-item.page-header h4 {
+    color: #808080 !important;
+}
+
+.annotation {
+    font-size: 0.8rem;
+}

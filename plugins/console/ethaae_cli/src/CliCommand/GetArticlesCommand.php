@@ -55,10 +55,12 @@ class GetArticlesCommand extends AbstractCommand
         $contentTags = $this->getArticleTags($db);
 
         $items = $this->getItems();
+        $totals = 0;
         $new = 0;
         $upd = 0;
 
         foreach ($items as $item) {
+            $totals++;
             $rslt = $this->importArticle($item,$catMaps,$db,$app,$symfonyStyle,$contentTags);
             switch ($rslt) {
                 case 1:
@@ -70,6 +72,7 @@ class GetArticlesCommand extends AbstractCommand
                 default:
             }
         }
+        $symfonyStyle->success($totals." Total Articles to be imported");
         $symfonyStyle->success($new." New Articles");
         $symfonyStyle->success($upd." Old Articles");
         $symfonyStyle->success(count(get_object_vars($items)).' Successfully Updated');
@@ -79,15 +82,16 @@ class GetArticlesCommand extends AbstractCommand
 
 
     protected function importArticle($item,$catMaps,$db,\Joomla\CMS\Application\ConsoleApplication $app,SymfonyStyle $symfonyStyle,$contentTags = array()) {
+        $symfonyStyle->info($item->id." - ".$item->title." - ".$item->alias." - ".$item->cat->title);
         $existingID = $this->aliasExists($item,$db,$catMaps);
         if (intval($existingID) >0) {
             $tag = (isset($item->tags[0])) ? $item->tags[0] : null;
             $item->id = $existingID;
             $newArticleID = $this->createArticle($item,$catMaps,$db,$app,$tag,$contentTags);
             if (is_numeric($newArticleID)) {
-//                $symfonyStyle->success('Article Succesfuly Updated');
+                $symfonyStyle->success('Article Successfully Updated');
             } else {
-                $symfonyStyle->info($item->id." - ".$item->title." - ".$item->alias." - ".$item->cat->title);
+                //$symfonyStyle->info($item->id." - ".$item->title." - ".$item->alias." - ".$item->cat->title);
                 $symfonyStyle->note('Article Exists: '.$existingID);
                 $symfonyStyle->error($newArticleID);
             }
@@ -283,7 +287,7 @@ class GetArticlesCommand extends AbstractCommand
 
 
         curl_setopt_array($curl, array(
-            CURLOPT_URL => "https://adip.bieinternal.net/tasks/getContent.php",
+            CURLOPT_URL => "https://www.ethaae.gr/tasks/getContent.php",
             CURLOPT_SSL_VERIFYPEER => false,
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_ENCODING => "",

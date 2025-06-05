@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+    <fields name="filter">
+        <field name="collectionyear"
+               type="sql"
+               label="COM_ETHAAE_QDATA_FORM_LBL_QDATA_COLLECTIONYEAR"
+               query="SELECT DISTINCT d.collectionyear, c.academic_reference_year as val FROM `#__ethaae_qdata_data` as d INNER JOIN #__ethaae_qdata_collections as c on c.collection_year = d.collectionyear  order by d.collectionyear DESC"
+               header="COM_ETHAAE_QDATA_QDATAS_COLLECTIONYEAR_FILTER"
+               key_field="collectionyear"
+               value_field="val"
+               class="inputbox"
+               onchange="this.form.submit()"
+               translate="true"
+        />
+<field
+        name="instituteid"
+        type="sql"
+        label="COM_ETHAAE_QDATA_FORM_LBL_QDATA_INSTITUTEID"
+        query="SELECT DISTINCT i.id as id, i.title_el AS val
+                FROM `#__ethaae_qdata_data` AS a INNER JOIN #__ethaae_institutes_structure AS i ON i.id = a.unitid
+                WHERE i.`unit_grouping` = '1' AND i.startupdate is not null
+                ORDER BY i.unit_grouping,i.title_el ASC"
+        header="COM_ETHAAE_QDATA_QDATAS_INSTITUTEID_FILTER"
+        key_field="id"
+        value_field="val"
+        class="inputbox"
+        onchange="this.form.submit()"
+        translate="true"
+/>
+        <field name="limitstart" type="hidden" default="" />
+
+    </fields>
+    <fields name="list">
+
+       <field name="limit"
+               type="list"
+               label="COM_ETHAAE_QDATA_LIST_LIMIT"
+               description=""
+               class="input-mini"
+               default="25"
+               onchange="this.form.submit();"
+        >
+        <option value="10">10</option>
+        <option value="25">25</option>
+        <option value="50">50</option>
+        <option value="100">100</option>
+       </field>
+    </fields>
+</form>

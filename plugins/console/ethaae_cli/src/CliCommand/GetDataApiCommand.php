@@ -47,6 +47,7 @@ class GetDataApiCommand extends AbstractCommand {
         $api_units_url = $plg_params->get('api_units_url','');
         $api_unittypes_url = $plg_params->get('api_unittypes_url','');
 
+        $symfonyStyle->info('Registering Unit Types');
         $unitTypes = $this->DoGetFunction($api_unittypes_url);
         foreach ($unitTypes as $unitType) {
             if (!$this->registerUnitType($db,$unitType)) {
@@ -60,28 +61,35 @@ class GetDataApiCommand extends AbstractCommand {
         $items = $this->DoGetFunction($api_units_url);
         $insts = 0;
         $t = 0;
+
+        $symfonyStyle->info('Registering Academic Units');
         $start = microtime(true);
+        $symfonyStyle->progressStart(count($items));
         foreach ($items as $item) {
             $insts++;
-            $symfonyStyle->info($item->id." - ".$item->title." - ".$item->unitTypeCode." - ".$item->unitCode);
+            //$symfonyStyle->info($item->id." - ".$item->title." - ".$item->unitTypeCode." - ".$item->unitCode);
             $url = $api_units_url.'/'.$item->id.'/Structure';
             $entries = $this->DoGetFunction($url);
 
             foreach ($entries->units as $entry) {
                 $t++;
-                $symfonyStyle->info($item->id." - ".$entry->title." - ".$entry->unitTypeCode." - ".$entry->unitCode);
+                //$symfonyStyle->info($item->id." - ".$entry->title." - ".$entry->unitTypeCode." - ".$entry->unitCode);
                 $arr = ArrayHelper::getValue($unitTypes,$entry->unitTypeCode,array());
                 $entry->unit_type_id = ArrayHelper::getValue($arr,'id',0);
                 $entry->unit_grouping = ArrayHelper::getValue($arr,'grouping',0);
                 $entry->short_code_el = ArrayHelper::getValue($arr,'short_code_el','');
                 $entry->short_code_en = ArrayHelper::getValue($arr,'short_code_en','');
+                $entry->unitDisplayOrder = ArrayHelper::getValue($arr,'unitDisplayOrder',0);
                 if (!$this->registerItem($db,$entry,$url)) {
                     $symfonyStyle->error('Error Importing Institute');
                     print_r($entry);die;
                 }
             }
-
+            $symfonyStyle->progressAdvance();
         }
+        $symfonyStyle->progressFinish();
+        $this->updateExTei($db);
+
         $time_elapsed_secs = microtime(true) - $start;
         $symfonyStyle->success($insts.' Institutes has successfully imported!!');
         $symfonyStyle->success($t.' Items has successfully imported!!');
@@ -102,7 +110,8 @@ class GetDataApiCommand extends AbstractCommand {
         $item->plural  = $unitType->plural;
         $item->prefix  = $unitType->prefix;
         $item->ordering  = $unitType->displayOrder;
-        $item->heiUnitType  = $unitType->heiUnitType;
+        $item->unitDisplayOrder  = $unitType->displayOrder;
+        $item->heiUnitType  =  (intval($unitType->heiUnitType) > 0) ? 1 : 0;
         $item->unitTypeCategoryId  = $unitType->unitTypeCategoryId;
         $item->unitTypeGroupId  = $unitType->unitTypeGroupId;
 
@@ -127,32 +136,36 @@ class GetDataApiCommand extends AbstractCommand {
 
     }
 
-    protected function registerItem($db,$institute,$url = "") {
+    protected function registerItem($db, $unit, $url = "") {
 
         $item = new \stdClass();
-        $item->id = $institute->id;
-        $item->uuid = $institute->uuid;
-        $item->title_el = $institute->title;
-        $item->title_en = $institute->titleEn;
+        $item->id = $unit->id;
+        $item->uuid = $unit->uuid;
+        $item->title_el = $unit->title;
+        $item->title_en = $unit->titleEn;
 //        $item->fk_intitute_type_id = getTableIdByName($db,'#__adip_institutes_types',$institute->InstituteType);
 //        $item->fk_region_id = getTableIdByName($db,'#__adip_regions',$institute->Region);
-        $item->ministrycode = $institute->ministryCode;
-        $item->unittypecode = $institute->unitTypeCode;
-        $item->status = $institute->status;
-        $item->versionid = $institute->versionId;
-        $item->instituteid = $institute->instituteId;
-        $item->unitcode = $institute->unitCode;
-        $item->parentunitid = $institute->parentUnitId;
-        $item->establishmentdate = $institute->establishmentDate;
-        $item->startupdate = $institute->startupDate;
-        $item->ceasedate = $institute->ceaseDate;
-        $item->abolitiondate = $institute->abolitionDate;
-        $item->greek = $institute->greek;
-        $item->notestablished = $institute->notEstablished;
-        $item->unit_type_id = $institute->unit_type_id;
-        $item->unit_grouping = $institute->unit_grouping;
-        $item->short_code_el = $institute->short_code_el;
-        $item->short_code_en = $institute->short_code_en;
+        $item->ministrycode = $unit->ministryCode;
+        $item->unittypecode = $unit->unitTypeCode;
+        $item->status = $unit->status;
+        $item->versionid = $unit->versionId;
+        $item->instituteid = $unit->instituteId;
+        $item->unitcode = $unit->unitCode;
+        $item->parentunitid = $unit->parentUnitId;
+        $item->establishmentdate = $unit->establishmentDate;
+        $item->startupdate = $unit->startupDate;
+        $item->ceasedate = $unit->ceaseDate;
+        $item->abolitiondate = $unit->abolitionDate;
+        $item->greek = $unit->greek;
+        $item->notestablished =  intval($unit->notEstablished) > 0 ? 1 : 0 ;
+        $item->unit_type_id = $unit->unit_type_id;
+        $item->unit_grouping = $unit->unit_grouping;
+        $item->short_code_el = $unit->short_code_el;
+        $item->short_code_en = $unit->short_code_en;
+        $item->unitTypeCategoryId  = $unit->unitTypeCategoryId;
+        $item->unitTypeGroupId  = $unit->unitTypeGroupId;
+        $item->unitDisplayOrder  = $unit->unitDisplayOrder;
+        $item->exTEI = 0;
 
             $act = "";
             try {
@@ -207,24 +220,9 @@ class GetDataApiCommand extends AbstractCommand {
         return ($id > 0) ? $id : 0;
     }
 
-    protected function getTableIdByName($db,$table, $name) {
-        $id = itemAlreadyExists($db,$table,'name',$name);
-        if ($id > 0) {
-            return $id;
-        } else {
-            $obj = new stdClass();
-            $db->id = 0;
-            $obj->name = $name;
-            $obj->state = 1;
-            $db->insertObject($table, $obj, 'id');
-            return $obj->id;
-        }
-        return 0;
-    }
-
     protected function getUnitTypes($db) {
         $query = $db->getQuery(true);
-        $query->select('id,code,grouping,short_code_el,short_code_en');
+        $query->select('id,code,grouping,short_code_el,short_code_en,unitDisplayOrder');
         $query->from('#__ethaae_unit_type');
         $db->setQuery($query);
         return $db->loadAssocList('code');
@@ -238,6 +236,12 @@ class GetDataApiCommand extends AbstractCommand {
         return 0;
     }
 
+    protected function updateExTei($db) {
+        //$query = "UPDATE `#__ethaae_institutes_structure` set exTEI = 1 where unit_grouping = 3 and title_el like '%ΤΕΙ%'";
+        $query = "UPDATE `#__ethaae_institutes_structure` set exTEI = 1 where (title_el like '%(ΤΕΙ %' or title_el like '%(ΑΤΕΙ %' or title_en like '%(TEI %' or title_en like '%(ATEI %' ) and unittypecode = 'UNDERGRADUATE' and unitcode not in('GRADP356')";
+        $db->setQuery($query);
+        $db->execute();
+    }
 /**
      * Configure the command.
      *

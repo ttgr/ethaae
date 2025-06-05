@@ -44,7 +44,7 @@ foreach ($fields as $fieldName => $field) {
 }
 
 
-$options = $data['options'];
+    $options = $data['options'];
 $options['filtersHidden'] = false;
 
 // Set some basic options

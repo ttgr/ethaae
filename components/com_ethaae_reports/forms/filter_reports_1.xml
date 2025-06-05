@@ -25,7 +25,7 @@
     <field name="filter_fk_reporttype_id" type="hidden" default="" />
     <field name="filter_fk_institute_id" type="hidden" default="" />
     <field name="filter_fk_dept_id" type="hidden" default="" />
-    <field name="dontresetstate" type="hidden" default="1" />
+    <field name="limitstart" type="hidden" default="" />
 
     <field name="list_limit"
            type="list"

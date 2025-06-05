@@ -2,7 +2,7 @@
 <form>
     <field name="filter_fk_institute_id"
            type="sql"
-           label="COM_ETHAAE_REPORTS_FORM_LBL_REPORT_FK_UNIT_ID"
+           label="COM_ETHAAE_REPORTS_REPORTS_INSTITUTE"
            query=""
            header="COM_ETHAAE_REPORTS_REPORTS_FK_UNIT_ID_FILTER"
            key_field="id"
@@ -14,7 +14,7 @@
 
     <field name="filter_fk_dept_id"
            type="sql"
-           label="COM_ETHAAE_REPORTS_FORM_LBL_REPORT_FK_UNIT_ID"
+           label="COM_ETHAAE_REPORTS_REPORTS_FK_DEPT_ID_LBL"
            query=""
            header="COM_ETHAAE_REPORTS_REPORTS_FK_UNIT_ID_FILTER"
            key_field="id"
@@ -37,7 +37,8 @@
 
     <field name="filter_fk_reporttype_id" type="hidden" default=""/>
     <field name="filter_fk_unit_id" type="hidden" default=""/>
-    <field name="dontresetstate" type="hidden" default="1" />
+    <field name="filter_dontresetstate" type="hidden" default="1" />
+    <field name="limitstart" type="hidden" default="" />
 
     <field name="list_limit"
            type="list"

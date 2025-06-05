@@ -10,6 +10,9 @@ use Joomla\CMS\Factory;
 use ETHAAE\Plugin\Console\Ethaae\CliCommand\GetDataApiCommand;
 use ETHAAE\Plugin\Console\Ethaae\CliCommand\ImportReportsCommand;
 use ETHAAE\Plugin\Console\Ethaae\CliCommand\GetArticlesCommand;
+use ETHAAE\Plugin\Console\Ethaae\CliCommand\GetUsersCommand;
+use ETHAAE\Plugin\Console\Ethaae\CliCommand\UpdateFilesCommand;
+use ETHAAE\Plugin\Console\Ethaae\CliCommand\GetQDataCommand;
 
 class EthaaeConsolePlugin extends CMSPlugin implements SubscriberInterface
 {
@@ -26,6 +29,9 @@ class EthaaeConsolePlugin extends CMSPlugin implements SubscriberInterface
         $app->addCommand(new GetDataApiCommand());
         $app->addCommand(new ImportReportsCommand());
         $app->addCommand(new GetArticlesCommand());
+        $app->addCommand(new GetUsersCommand());
+        $app->addCommand(new UpdateFilesCommand());
+        $app->addCommand(new GetQDataCommand());
     }
 
     public function getApiUrl() {

@@ -29,6 +29,8 @@ class ReportsModel extends ListModel
 
 
     var $resetState = false;
+    var $reportTypeID = 0;
+
 	/**
 	 * Constructor.
 	 *
@@ -42,11 +44,12 @@ class ReportsModel extends ListModel
 		if (empty($config['filter_fields']))
 		{
 			$config['filter_fields'] = array(
-                'unit_title_el','unit_title_en',
-                'institute_title_el','institute_title_en',
-                'parent_title_el','parent_title_en',
-				'report_year', 'a.report_year',
-				'title', 'a.title',
+                'fk_unit_id',
+                'fk_institute_id',
+                'fk_dept_id',
+                'report_year',
+                'order',
+                'order_Dir',
 			);
 		}
 
@@ -72,7 +75,7 @@ class ReportsModel extends ListModel
 	protected function populateState($ordering = null, $direction = null)
 	{
 		// List state information.
-		parent::populateState('a.id', 'ASC');
+		//parent::populateState('a.report_year', 'DESC');
 
 		$app = Factory::getApplication();
 		$list = $app->getUserState($this->context . '.list');
@@ -83,9 +86,13 @@ class ReportsModel extends ListModel
 		$this->setState('list.limit', $value);
 		$value = $app->input->get('limitstart', 0, 'uint');
 		$this->setState('list.start', $value);
-		$ordering  = $this->getUserStateFromRequest($this->context .'.filter_order', 'filter_order', 'a.id');
-		$direction = strtoupper($this->getUserStateFromRequest($this->context .'.filter_order_Dir', 'filter_order_Dir', 'ASC'));
+		$ordering  = $this->getUserStateFromRequest($this->context .'.filter_order', 'filter_order', 'a.report_year');
+		$direction = strtoupper($this->getUserStateFromRequest($this->context .'.filter_order_Dir', 'filter_order_Dir', 'DESC'));
 
+        $ordering = (empty($ordering)) ? 'a.report_year' : $ordering;
+        $direction = (empty($direction)) ? 'DESC' : $direction;
+        $this->setState('list.ordering', $ordering);
+        $this->setState('list.direction', $direction);
 
 
         $filter_fk_unit_id  = $this->getUserStateFromRequest($this->context .'.filter_fk_unit_id', 'filter_fk_unit_id', '0');
@@ -103,12 +110,21 @@ class ReportsModel extends ListModel
         $filter_report_year  = $this->getUserStateFromRequest($this->context .'.filter_report_year', 'filter_report_year', '0');
         $this->setState('filter.report_year', $filter_report_year);
 
-        if($this->resetState) {
+        if ($this->reportTypeID != $filter_fk_reporttype_id) {
+  //          dump("New Page");
             $this->setState('filter.fk_unit_id', '');
             $this->setState('filter.fk_institute_id', '');
             $this->setState('filter.fk_dept_id', '');
             $this->setState('filter.fk_reporttype_id', '');
+
         }
+//        dump($this->state);
+//        if($this->resetState) {
+//            $this->setState('filter.fk_unit_id', '');
+//            $this->setState('filter.fk_institute_id', '');
+//            $this->setState('filter.fk_dept_id', '');
+//            $this->setState('filter.fk_reporttype_id', '');
+//        }
 
 		if(!empty($ordering) || !empty($direction))
 		{
@@ -116,7 +132,7 @@ class ReportsModel extends ListModel
 		}
 		$app->setUserState($this->context . '.list', $list);
 
-		
+
 
 		$context = $this->getUserStateFromRequest($this->context.'.filter.search', 'filter_search');
 		$this->setState('filter.search', $context);
@@ -262,8 +278,8 @@ class ReportsModel extends ListModel
 			$query->where("a.`report_year` = '".$db->escape($filter_report_year)."'");
 		}
 			// Add the list ordering clause.
-			$orderCol  = $this->state->get('list.ordering', 'a.id');
-			$orderDirn = $this->state->get('list.direction', 'ASC');
+			$orderCol  = $this->state->get('list.ordering', 'a.report_year');
+			$orderDirn = $this->state->get('list.direction', 'DESC');
 
 			if ($orderCol && $orderDirn)
 			{
