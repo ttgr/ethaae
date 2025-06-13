@@ -429,9 +429,16 @@ class ReportModel extends AdminModel
         ];
         $data['title'] = Ethaae_reportsHelper::getUnitInfo($data['fk_unit_id'])->title;
         $data['fk_parent_id'] = Ethaae_reportsHelper::getUnitInfo($data['fk_unit_id'])->parentunitid;
+        if ((int) $data['id']  == 0 && !$this->isReportUnique($data)) {
+            Factory::getApplication()->enqueueMessage(Text::sprintf('COM_ETHAAE_REPORTS_DUPLICATED_ENTRY', $data['title'], $data['report_year']),
+                'error'
+            );
+            return false;
+        }
 
         try {
             $result = parent::save($data);
+//            dd($result);
             if ($result) {
                 $id = $this->getState($this->getName().'.id');
                 $item = $this->getItem($id);
@@ -499,6 +506,22 @@ class ReportModel extends AdminModel
             return array('message'=>'Register File exception '.  $e->getMessage());
         }
     }
+
+    public function isReportUnique (array $data) : bool {
+        $db = Factory::getContainer()->get('DatabaseDriver');
+        $query = $db->getQuery(true);
+        $query
+            ->select($db->quoteName('id'))
+            ->from($db->quoteName('#__ethaae_reports'))
+            ->where($db->quoteName('fk_reporttype_id') . ' = ' . $db->quote($data['fk_reporttype_id']))
+            ->where($db->quoteName('report_year') . ' = ' . $db->quote($data['report_year']))
+            ->where($db->quoteName('fk_unit_id') . ' = ' . $db->quote($data['fk_unit_id']));
+        if ($data['id'] > 0)  $query->where($db->quoteName('id') . ' <> ' . (int) $data['id']);
+        $db->setQuery($query);
+        $db->execute();
+        return $db->getNumRows() == 0;
+    }
+
 
     public function getFilesLIsting(int $report_id) {
 

@@ -89,10 +89,9 @@ class PersonnelsModel extends ListModel
 		$app = Factory::getApplication();
 		$list = $app->getUserState($this->context . '.list');
 
-		$value = $app->getUserState($this->context . '.list.limit', $app->get('list_limit', 25));
-		$list['limit'] = $value;
-		
-		$this->setState('list.limit', $value);
+		//$value = $app->getUserState($this->context . '.list.limit', $app->get('list_limit', 25));
+		$list['limit'] = 1000;
+		$this->setState('list.limit', 1000);
 
 		$value = $app->input->get('limitstart', 0, 'uint');
 		$this->setState('list.start', $value);
@@ -155,7 +154,7 @@ class PersonnelsModel extends ListModel
 
         $query->order($db->escape('d.ordering ASC'));
         $query->order($db->escape('a.ordering ASC'));
-        //Factory::getApplication()->enqueueMessage($db->replacePrefix((string) $query), 'notice');
+//        Factory::getApplication()->enqueueMessage($db->replacePrefix((string) $query), 'notice');
 
         return $query;
     }
@@ -175,7 +174,6 @@ class PersonnelsModel extends ListModel
         $l = explode("-", $lang->getTag());
         $pre = 0;
         $rows = array();
-
         foreach ($items as $item)
         {
             $row = new \stdClass();
@@ -193,8 +191,6 @@ class PersonnelsModel extends ListModel
             }
             $rows[$pre][] = $row;
         }
-
-
 
         return $rows;
 	}
