@@ -119,6 +119,7 @@ $hasZeroValue = false;
         <?php if ($hasZeroValue) : ?>
             <li><?php echo Text::_('COM_ETHAAE_QDATA_VARIABLE_ZERO_DESC');?></li>
         <?php endif; ?>
+        <li><?php echo Text::_('COM_ETHAAE_QDATA_VARIABLE_OLD_ATEI');?></li>
     </ul>
 </div>
 
